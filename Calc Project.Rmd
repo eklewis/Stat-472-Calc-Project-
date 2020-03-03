@@ -46,9 +46,12 @@ Switcher Groups
 Persister Groups
 
 ```{r}
-
-
-
+p12 <- data %>% filter(Q26 == 1, Q3FUS_Yes == "Yes")
+p13 <- data %>% filter(Q26 == 3, Q3FUS_Yes == "Yes")
+p14 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3FUS_Yes == "Yes")
+p15 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3FUS_Yes == "Yes")
+p16 <- data %>% filter(Q26 == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+p17 <- data %>% filter(Q26 == 1, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
 
 ```
 
