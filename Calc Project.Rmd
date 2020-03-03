@@ -32,6 +32,8 @@ data$Q3FUS=paste(data$Q3FUS_No, data$Q3FUS_Yes)
 
 # Switcher Coding
 
+Switcher Groups
+
 ```{r}
 
 
@@ -40,6 +42,17 @@ data$Q3FUS=paste(data$Q3FUS_No, data$Q3FUS_Yes)
 
 
 ```
+
+
+Persister Groups
+
+```{r}
+
+
+
+
+```
+
 
 
 
