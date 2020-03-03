@@ -9,10 +9,21 @@ output: pdf_document
 
 
 ```{r}
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("knitr")
+install.packages("knitrExtra")
+
+library(dplyr)
+library(tidyr)
+library(knitr)
+library(knitrExtra)
+```
+
+
+
+```{r}
 data <- read.csv("journal.pone.0157447.s003.CSV")
-
-
-
 
 ```
 
