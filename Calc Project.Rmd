@@ -27,6 +27,7 @@ library(kableExtra)
 data <- read.csv("CSPCC_Switcher_Data.csv")
 data$Q3FUS=paste(data$Q3FUS_No, data$Q3FUS_Yes)
 
+
 ```
 
 
@@ -48,11 +49,36 @@ Persister Groups
 
 ```{r}
 p12 <- data %>% filter(Q26 == 1, Q3FUS_Yes == "Yes")
+
 p13 <- data %>% filter(Q26 == 3, Q3FUS_Yes == "Yes")
+
 p14 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3FUS_Yes == "Yes")
+
 p15 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3FUS_Yes == "Yes")
+
 p16 <- data %>% filter(Q26 == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+
 p17 <- data %>% filter(Q26 == 1, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+
+p18 <- data %>% filter(Q26 == 1, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" )
+
+p19 <- data %>% filter(Q26 == 1, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+
+p20 <- data %>% filter(Q26 == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+
+p21 <- data %>% filter(Q26 == 3, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+
+
+p22 <- data %>% filter(Q26 == 3, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+
+p23 <- data %>% filter(Q26 == 3, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" ) 
+
+p24 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+
+p25 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+
+p26 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+
 
 ```
 
