@@ -25,6 +25,7 @@ library(kableExtra)
 
 ```{r}
 data <- read.csv("CSPCC_Switcher_Data.csv")
+data$Q3FUS=paste(data$Q3FUS_No, data$Q3FUS_Yes)
 
 ```
 
@@ -44,11 +45,6 @@ data <- read.csv("CSPCC_Switcher_Data.csv")
 
 
 2. Prepare the data for analysis using S3 File. You should be left with 2,266 students (rows) after data preparation.
-
-```{r}
-
-```
-
 
 3. Reproduce the tables S1, S5, S6, S7, and S8.
 Caution: There could be a typo in table S1.
