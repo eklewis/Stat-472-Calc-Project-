@@ -25,6 +25,7 @@ library(kableExtra)
 
 ```{r}
 data <- read.csv("CSPCC_Switcher_Data.csv")
+data$Q3FUS=paste(data$Q3FUS_No, data$Q3FUS_Yes)
 
 ```
 
