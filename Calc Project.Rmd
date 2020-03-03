@@ -7,6 +7,20 @@ output: pdf_document
 
 1. Data required for the Calculus retention study is in S1 File in the Supporting Information section of the paper. S2 File has information about the survey questions and response codings in the data set. Load the data and understand each column.
 
+
+```{r}
+data <- read.csv("journal.pone.0157447.s003.CSV")
+
+
+
+
+```
+
+
+
+
+
+
 2. Prepare the data for analysis using S3 File. You should be left with 2,266 students (rows) after data preparation.
 
 3. Reproduce the tables S1, S5, S6, S7, and S8.
