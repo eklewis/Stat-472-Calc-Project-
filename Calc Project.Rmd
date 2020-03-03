@@ -23,6 +23,11 @@ data <- read.csv("journal.pone.0157447.s003.CSV")
 
 2. Prepare the data for analysis using S3 File. You should be left with 2,266 students (rows) after data preparation.
 
+```{r}
+
+```
+
+
 3. Reproduce the tables S1, S5, S6, S7, and S8.
 Caution: There could be a typo in table S1.
 
