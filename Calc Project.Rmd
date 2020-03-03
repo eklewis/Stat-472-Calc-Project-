@@ -32,9 +32,11 @@ data <- read.csv("CSPCC_Switcher_Data.csv")
 # Switcher Coding
 
 ```{r}
-
-
-
+s1 <- data %>% filter(Q26 == 1, Q3FUS_No == "No")
+s2 <- data %>% filter(Q26 == 3, Q3FUS_No == "No")
+s3 <- data %>% filter(is.na(Q26),Q5Post == 1, Q3FUS_No == "No")
+s4 <- data %>% filter(is.na(Q26),Q5Post == 3, Q3FUS_No == "No")
+s5 <- data %>% filter(Q26 == 1, Q3Post == 1, Q5Post == 3, Q3FUS_No == " ", Q3FUS_Yes == " ")
 
 
 
