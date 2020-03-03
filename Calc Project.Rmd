@@ -5,26 +5,14 @@ date: "3/3/2020"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+1. Data required for the Calculus retention study is in S1 File in the Supporting Information section of the paper. S2 File has information about the survey questions and response codings in the data set. Load the data and understand each column.
 
-## R Markdown
+2. Prepare the data for analysis using S3 File. You should be left with 2,266 students (rows) after data preparation.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+3. Reproduce the tables S1, S5, S6, S7, and S8.
+Caution: There could be a typo in table S1.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
+Heads-up: Do you really have all the data that you need? Figure out what is missing and let us know... You can not do this homework without the missing information!
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
