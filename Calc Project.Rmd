@@ -25,11 +25,14 @@ library(kableExtra)
 
 ```{r}
 data <- read.csv("CSPCC_Switcher_Data.csv")
+data$Q3FUS=paste(data$Q3FUS_No, data$Q3FUS_Yes)
 
 ```
 
 
 # Switcher Coding
+
+Switcher Groups
 
 ```{r}
 s1 <- data %>% filter(Q26 == 1, Q3FUS_No == "No")
@@ -41,6 +44,17 @@ s5 <- data %>% filter(Q26 == 1, Q3Post == 1, Q5Post == 3, Q3FUS_No == " ", Q3FUS
 
 
 ```
+
+
+Persister Groups
+
+```{r}
+
+
+
+
+```
+
 
 
 
