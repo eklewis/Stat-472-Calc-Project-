@@ -8,26 +8,37 @@ output: pdf_document
 1. Data required for the Calculus retention study is in S1 File in the Supporting Information section of the paper. S2 File has information about the survey questions and response codings in the data set. Load the data and understand each column.
 
 
-```{r}
-install.packages("dplyr")
-install.packages("tidyr")
-install.packages("knitr")
-install.packages("knitrExtra")
+```{r echo=FALSE, message=FALSE}
+#install.packages("dplyr")
+#install.packages("tidyr")
+#install.packages("knitr")
+#install.packages("kableExtra")
+
 
 library(dplyr)
 library(tidyr)
 library(knitr)
-library(knitrExtra)
+library(kableExtra)
 ```
 
 
 
 ```{r}
-data <- read.csv("journal.pone.0157447.s003.CSV")
+data <- read.csv("CSPCC_Switcher_Data.csv")
 
 ```
 
 
+# Switcher Coding
+
+```{r}
+
+
+
+
+
+
+```
 
 
 
@@ -39,4 +50,5 @@ Caution: There could be a typo in table S1.
 
 
 Heads-up: Do you really have all the data that you need? Figure out what is missing and let us know... You can not do this homework without the missing information!
+
 
