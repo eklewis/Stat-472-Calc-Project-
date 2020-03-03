@@ -31,6 +31,8 @@ data <- read.csv("CSPCC_Switcher_Data.csv")
 
 # Switcher Coding
 
+Switcher Groups
+
 ```{r}
 
 
@@ -39,6 +41,17 @@ data <- read.csv("CSPCC_Switcher_Data.csv")
 
 
 ```
+
+
+Persister Groups
+
+```{r}
+
+
+
+
+```
+
 
 
 
