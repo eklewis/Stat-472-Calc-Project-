@@ -104,12 +104,15 @@ x4 <- c("","","Y","M","Y","","Y","","Y","Y","M")
 x5 <- c("","","","","M","N","M","N","M","N","N")
 x6 <- c("N","N","N","N","NA","NA","NA","NA","NA","NA","NA")
 
+<<<<<<< HEAD
 tabS1 <- cbind(x1,x2,x3,x4,x5,x6)
 
 colnames(tabS1) <- c("Switcher Group", "Number of Students","Beginning of term","End of term; reflect", "End of term", "Follow Up")
 rownames(tabS1) <- NULL
 
 kable(tabS1)
+=======
+>>>>>>> 333c11f45f098fb204cf01cf9062af7fda42366d
 
 ```
 
