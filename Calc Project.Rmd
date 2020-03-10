@@ -98,12 +98,18 @@ Table s1:
 
 ```{r}
 x1=c("1", "2", "3", "4", "5", "6","7", "8", "9", "10", "11")
-x2=c(length(s1), length(s2), length(s3), length(s4), length(s5), length(s6), length(s7), length(s8), length(s9), length(s10), length(s11))
-x3=
+x2=c(count(s1), count(s2), count(s3), count(s4), count(s5), count(s6), count(s7), count(s8), count(s9), count(s10), count(s11))
+x3 <- c("Y","M","NA","NA","Y","Y","M","M","NA","NA","NA")
+x4 <- c("","","Y","M","Y","","Y","","Y","Y","M")
+x5 <- c("","","","","M","N","M","N","M","N","N")
+x6 <- c("N","N","N","N","NA","NA","NA","NA","NA","NA","NA")
 
-switchdata %>%
-  select(Q26, Q5Post, Q3Post, Q3FUS) %>%
-  mutate(x2)
+tabS1 <- cbind(x1,x2,x3,x4,x5,x6)
+
+colnames(tabS1) <- c("Switcher Group", "Number of Students","Beginning of term","End of term; reflect", "End of term", "Follow Up")
+rownames(tabS1) <- NULL
+
+kable(tabS1)
 
 ```
 
