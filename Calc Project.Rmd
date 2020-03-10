@@ -99,24 +99,20 @@ Table s1:
 ```{r}
 x1=c("1", "2", "3", "4", "5", "6","7", "8", "9", "10", "11")
 x2=c(count(s1), count(s2), count(s3), count(s4), count(s5), count(s6), count(s7), count(s8), count(s9), count(s10), count(s11))
-<<<<<<< HEAD
+
 x3 <- c("Y","M","NA","NA","Y","Y","M","M","NA","NA","NA")
 x4 <- c("","","Y","M","Y","","Y","","Y","Y","M")
 x5 <- c("","","","","M","N","M","N","M","N","N")
 x6 <- c("N","N","N","N","NA","NA","NA","NA","NA","NA","NA")
-=======
-x3=
->>>>>>> fd6bba63738b9e137af432952335f791edb74a79
 
-<<<<<<< HEAD
+
 tabS1 <- cbind(x1,x2,x3,x4,x5,x6)
 
 colnames(tabS1) <- c("Switcher Group", "Number of Students","Beginning of term","End of term; reflect", "End of term", "Follow Up")
 rownames(tabS1) <- NULL
 
 kable(tabS1)
-=======
->>>>>>> 333c11f45f098fb204cf01cf9062af7fda42366d
+
 
 ```
 Table s1 (persister group)
@@ -133,9 +129,12 @@ y5=c("", "", "", "", "Y", "M", "M", "M", "Y", "M", "M", "M", "Y", "Y", "M")
 y6=c("Y", "Y", "Y", "Y", "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA")
 
 s1_p=cbind(y1, y2, y3, y4, y5, y6)
-s1_p
 
+colnames(s1_p) <- c("Persister Group", "Number of Students","Beginning of term","End of term; reflect", "End of term", "Follow Up")
+rownames(s1_p) <- NULL
 
+kable(s1_p)%>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
 
 
