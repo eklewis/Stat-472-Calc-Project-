@@ -140,16 +140,51 @@ s1_p
 Caution: There could be a typo in table S1.
 
 ```{r}
-switchdata <- switchdata %>% 
+careerdata <- switchdata %>% 
   mutate(major = fct_collapse(factor(switchdata$Q60, levels=1:16), 
                               `1` = c("3","4","5","7","8","9"), 
                               `2` = "6", 
                               `3` = c("1","2"),
                               `4` = c("10","11","12","13","14","15"),
                               `5` = "16"))
+
 ```
 
 
-Heads-up: Do you really have all the data that you need? Figure out what is missing and let us know... You can not do this homework without the missing information!
+```{r}
+
+IQ <- select(data, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
+
+IQ$Q18Post_Discouraged <- 7-IQ$Q18Post_Discouraged
+
+IQ <- na.omit(IQ)
+
+pr_IQ <- princomp(IQ)
+
+rescale_load_iq <- pr_IQ$loadings/sum(pr_IQ$loadings[,1])
+
+round(rescale_load_iq[,1],3)
+
+
+```
+```{r}
+
+SC <- select(data, Q19Post_AskQuestions, Q19Post_Discussion, Q19Post_ExplainThinking, Q19Post_Individually, Q19Post_Lecture,Q19Post_Presentations,Q19Post_SpecificProblems, Q19Post_WorkTogether)
+
+SC$Q19Post_Lecture <- 7 - SC$Q19Post_Lecture
+
+SC <- na.omit(SC)
+
+pr_SC <- princomp(SC)
+
+round(pr_SC$loadings[,1],3)
+
+rescale_load_sc <- pr_SC$loadings/sum(pr_SC$loadings[,1])
+
+round(rescale_load_sc[,1],3)
+
+```
+
+
 
 
