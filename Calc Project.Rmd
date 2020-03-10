@@ -88,7 +88,9 @@ p26 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q
 
 ```{r}
 
-switchdata <- rbind(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,p12,p13,p14,p15,p16,p17,p18,p19,p20,p21,p22,p23,p24,p25,p26)
+switchdata <- rbind(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,
+                    s11,p12,p13,p14,p15,p16,p17,p18,
+                    p19,p20,p21,p22,p23,p24,p25,p26)
 
 ```
 
