@@ -19,6 +19,7 @@ library(dplyr)
 library(tidyr)
 library(knitr)
 library(kableExtra)
+library(forcats)
 ```
 
 
@@ -112,6 +113,16 @@ switchdata %>%
 
 3. Reproduce the tables S1, S5, S6, S7, and S8.
 Caution: There could be a typo in table S1.
+
+```{r}
+switchdata <- switchdata %>% 
+  mutate(major = fct_collapse(factor(switchdata$Q60, levels=1:16), 
+                              `1` = c("3","4","5","7","8","9"), 
+                              `2` = "6", 
+                              `3` = c("1","2"),
+                              `4` = c("10","11","12","13","14","15"),
+                              `5` = "16"))
+```
 
 
 Heads-up: Do you really have all the data that you need? Figure out what is missing and let us know... You can not do this homework without the missing information!
