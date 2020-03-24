@@ -13,12 +13,13 @@ output: pdf_document
 #install.packages("tidyr")
 #install.packages("knitr")
 #install.packages("kableExtra")
-
+install.packages("forcats")
 
 library(dplyr)
 library(tidyr)
 library(knitr)
 library(kableExtra)
+library(forcats)
 ```
 
 
@@ -106,6 +107,7 @@ x5 <- c("","","","","M","N","M","N","M","N","N")
 x6 <- c("N","N","N","N","NA","NA","NA","NA","NA","NA","NA")
 
 
+
 tabS1 <- cbind(x1,x2,x3,x4,x5,x6)
 
 colnames(tabS1) <- c("Switcher Group", "Number of Students","Beginning of term","End of term; reflect", "End of term", "Follow Up")
@@ -113,6 +115,9 @@ rownames(tabS1) <- NULL
 
 kable(tabS1)
 
+
+kable(tabS1) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
 ```
 Table s1 (persister group)
@@ -143,6 +148,28 @@ kable(s1_p)%>%
 
 3. Reproduce the tables S1, S5, S6, S7, and S8.
 Caution: There could be a typo in table S1.
+
+```{r}
+careerdata <- switchdata %>% 
+  mutate(major = fct_collapse(factor(switchdata$Q60, levels=1:16), 
+                              `1` = c("3","4","5","7","8","9"), 
+                              `2` = "6", 
+                              `3` = c("1","2"),
+                              `4` = c("10","11","12","13","14","15"),
+                              `5` = "16")) %>%
+  filter(! is.na(major)) %>% ## filtering out NA's in major
+  filter(! is.na(Q48)) %>% ## filtering out NA's in gender
+  filter(! (is.na(Q3_SATMath) & is.na(Q7_ACTMath))) %>% ##std testing 
+  filter(Q3_SATMath >= 200, Q3_SATMath <= 800, Q3_SATMath %% 10 ==0,  ) %>%
+  filter(! (is.na(Q18Post_AskedQs) & is.na(Q18Post_Listened) & is.na(Q18Post_Applications) & is.na(Q18Post_Time) & is.na(Q18Post_ProblemSolver) & is.na(Q18Post_Explanations) & is.na(Q18Post_Appointments) & is.na(Q18Post_Discouraged))) %>% ## InstructorQuality 
+filter(! (is.na(Q19Post_SpecificProblems) & is.na(Q19Post_WorkTogether) & is.na(Q19Post_Discussion) & is.na(Q19Post_Presentations) & is.na(Q19Post_Individually) & is.na(Q19Post_Lecture) & is.na(Q19Post_AskQuestions) & is.na(Q19Post_ExplainThinking))) %>% ##StudentPractices
+  filter(! is.na(Q18)) 
+  
+  
+
+    unique(careerdata$Q3_SATMath)
+
+```
 
 
 Heads-up: Do you really have all the data that you need? Figure out what is missing and let us know... You can not do this homework without the missing information!
