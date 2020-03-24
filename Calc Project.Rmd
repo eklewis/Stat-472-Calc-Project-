@@ -185,7 +185,7 @@ rescale_load_iq <- pr_IQ$loadings/sum(pr_IQ$loadings[,1])
 
 round(rescale_load_iq[,1],3)
 
-IQ %>% mutate(Inst.Qual = sum(rescale_load_iq*(Q18Post_Applications*+ Q18Post_Appointments+ Q18Post_AskedQs+ Q18Post_Discouraged+ Q18Post_Explanations+ Q18Post_Listened+ Q18Post_ProblemSolver+ Q18Post_Time)))
+IQ <- IQ %>% mutate(Inst.Qual = (rescale_load_iq[,1]*(Q18Post_Applications+ Q18Post_Appointments+ Q18Post_AskedQs+ Q18Post_Discouraged+ Q18Post_Explanations+ Q18Post_Listened+ Q18Post_ProblemSolver+ Q18Post_Time))) 
 
 ```
 ```{r}
