@@ -13,7 +13,7 @@ output: pdf_document
 #install.packages("tidyr")
 #install.packages("knitr")
 #install.packages("kableExtra")
-install.packages("forcats")
+#install.packages("forcats")
 
 library(dplyr)
 library(tidyr)
