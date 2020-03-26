@@ -154,16 +154,33 @@ careerdata <- switchdata %>%
                               `3` = c("1","2"),
                               `4` = c("10","11","12","13","14","15"),
                               `5` = "16")) %>%
-  filter(! is.na(major)) %>% ## filtering out NA's in major
-  filter(! is.na(Q48)) %>% ## filtering out NA's in gender
-  filter(! (is.na(Q3_SATMath) & is.na(Q7_ACTMath))) %>% ##std testing 
-  filter(Q3_SATMath >= 200, Q3_SATMath <= 800, Q3_SATMath %% 10 ==0,  ) %>%
-  filter(! (is.na(Q18Post_AskedQs) & is.na(Q18Post_Listened) & is.na(Q18Post_Applications) & is.na(Q18Post_Time) & is.na(Q18Post_ProblemSolver) & is.na(Q18Post_Explanations) & is.na(Q18Post_Appointments) & is.na(Q18Post_Discouraged))) %>% ## InstructorQuality 
-filter(! (is.na(Q19Post_SpecificProblems) & is.na(Q19Post_WorkTogether) & is.na(Q19Post_Discussion) & is.na(Q19Post_Presentations) & is.na(Q19Post_Individually) & is.na(Q19Post_Lecture) & is.na(Q19Post_AskQuestions) & is.na(Q19Post_ExplainThinking))) %>%##StudentPractices
-  filter(! is.na(Q18)) 
+  
+ filter(!(is.na(Q15_CalculusNonAPFinalGrade) & is.na(Q17_CalculusABFinalGrade) 
+          & is.na(Q17_CalculusBCFinalGrade) & is.na(Q18))) %>% #filter cal exp
+  
+  filter(! is.na(major)) %>% #filter major
+  
+  filter(! (is.na(Q3_SATMath) & is.na(Q7_ACTMath))) %>% #filter no stnd test
+  
+  filter(((Q3_SATMath >= 200) & (Q3_SATMath <= 800) & (Q3_SATMath %% 10 == 0)) |
+           is.na(Q3_SATMath)) %>% #filter out bad SAT scores.
+  
+  filter((Q7_ACTMath >= 0 & Q7_ACTMath <= 36 & Q7_ACTMath %% 1 == 0) | is.na(Q7_ACTMath)) %>%       #filter out bad ACT
+  
+  filter(! is.na(Q48)) %>%#filter gender
+  
+  filter(! (is.na(Q18Post_Applications) & is.na(Q18Post_Appointments) & is.na(Q18Post_AskedQs)
+            & is.na(Q18Post_Discouraged) & is.na(Q18Post_Explanations) &
+              is.na(Q18Post_Listened) &         is.na(Q18Post_ProblemSolver) &
+              is.na(Q18Post_Time))) %>% #filer instruc qual
+  
+filter(! (is.na(Q19Post_SpecificProblems) & is.na(Q19Post_WorkTogether) &
+            is.na(Q19Post_Discussion) & is.na(Q19Post_Presentations) &
+            is.na(Q19Post_Individually) & is.na(Q19Post_Lecture) & is.na(Q19Post_AskQuestions)
+          & is.na(Q19Post_ExplainThinking))) #filter student prep
   
 
-unique(careerdata$Q3_SATMath)
+#unique(careerdata$Q3_SATMath)
 
 ```
 
@@ -201,10 +218,6 @@ round(pr_SC$loadings[,1],3)
 rescale_load_sc <- pr_SC$loadings/sum(pr_SC$loadings[,1])
 
 round(rescale_load_sc[,1],3)
-<<<<<<< HEAD
-
-=======
->>>>>>> 1383e633fa87a594b42fbcc0e18b7d80a1a7d758
 
 
 SC <- SC %>% mutate(Student.Cent = (rescale_load_sc[,1]*(Q19Post_AskQuestions + Q19Post_Discussion + Q19Post_ExplainThinking + Q19Post_Individually + Q19Post_Lecture + Q19Post_Presentations + Q19Post_SpecificProblems + Q19Post_WorkTogether)))
