@@ -184,7 +184,7 @@ filter(! (is.na(Q19Post_SpecificProblems) & is.na(Q19Post_WorkTogether) &
 
 
 ```{r}
-
+## Instructor Quality 
 IQ <- select(data, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
 
 IQ$Q18Post_Discouraged <- 7-IQ$Q18Post_Discouraged
@@ -202,7 +202,7 @@ IQ <- IQ %>% mutate(Inst.Qual = (rescale_load_iq[,1]*(Q18Post_Applications+ Q18P
 ```
 
 ```{r}
-
+## Student centered
 SC <- select(data, Q19Post_AskQuestions, Q19Post_Discussion, Q19Post_ExplainThinking, Q19Post_Individually, Q19Post_Lecture,Q19Post_Presentations,Q19Post_SpecificProblems, Q19Post_WorkTogether)
 
 SC$Q19Post_Lecture <- 7 - SC$Q19Post_Lecture
@@ -221,6 +221,17 @@ round(rescale_load_sc[,1],3)
 SC <- SC %>% mutate(Student.Cent = (rescale_load_sc[,1]*(Q19Post_AskQuestions + Q19Post_Discussion + Q19Post_ExplainThinking + Q19Post_Individually + Q19Post_Lecture + Q19Post_Presentations + Q19Post_SpecificProblems + Q19Post_WorkTogether)))
 ```
 
+```{r}
+careerdata <- careerdata %>% 
+  mutate(Inst.Qual = (rescale_load_iq[,1]*(Q18Post_Applications+ Q18Post_Appointments+
+                                             Q18Post_AskedQs+ Q18Post_Discouraged+
+                                             Q18Post_Explanations+ Q18Post_Listened+ 
+                                             Q18Post_ProblemSolver+ Q18Post_Time))) %>% 
+  mutate(Student.Cent = (rescale_load_sc[,1]*(Q19Post_AskQuestions + Q19Post_Discussion +
+                                              Q19Post_ExplainThinking+Q19Post_Individually
+                                              +Q19Post_Lecture + Q19Post_Presentations +
+                                          Q19Post_SpecificProblems+Q19Post_WorkTogether)))
+```
 
 
 
