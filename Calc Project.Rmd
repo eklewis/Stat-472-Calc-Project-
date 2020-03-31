@@ -162,10 +162,8 @@ careerdata <- switchdata %>%
   
   filter(! (is.na(Q3_SATMath) & is.na(Q7_ACTMath))) %>% #filter no stnd test
   
-  filter(((Q3_SATMath >= 200) & (Q3_SATMath <= 800) & (Q3_SATMath %% 10 == 0)) |
-           is.na(Q3_SATMath)) %>% #filter out bad SAT scores.
   
-  filter((Q7_ACTMath >= 0 & Q7_ACTMath <= 36 & Q7_ACTMath %% 1 == 0) | is.na(Q7_ACTMath)) %>%       #filter out bad ACT
+  filter(Q3_SATMath %in% seq(200,800,10) | Q7_ACTMath %in% seq(1,36,1)) %>%
   
   filter(! is.na(Q48)) %>%#filter gender
   
