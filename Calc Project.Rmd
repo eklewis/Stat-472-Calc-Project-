@@ -302,6 +302,43 @@ kable(S8)  %>% kable_styling(bootstrap_options = c("striped", "hover", "condense
 S7 (Emma)
 
 ```{r}
+X_SAT=careerdata$Q3_SATMath
+SAT=rev(seq(200,800,by=10))
+SAT_per=c(99,99, 99, 98, 97,97,96,95,95,94,93,91,90,88,87,85,83,82,79,77,75,73,70,67,64,62,59,55,52, 49,45,42,40,36,33,30,27,24,21,19,16,14,12,10,9, 7,6,5,4,3,3,2,2,1,1,1,1,1,0,0,0)
+
+X_ACT=careerdata$Q7_ACTMath
+ACT=36:1
+ACT_per=c(99,99,99,98,97,96,95,93,91,88,84,79,73,67,61,56,52,47,42,36,27,15,6,2)
+ACT_per=c(ACT_per, rep(1,length(ACT)-length(ACT_per)))
+
+X_SAT=SAT_per[match(X_SAT, SAT)]
+
+X_ACT= ACT_per[match(X_ACT, ACT)]
+
+
+head(careerdata)
+
+careerdata$x_per=rowMeans(cbind(X_SAT, X_ACT), na.rm=TRUE)
+
+s7 <- careerdata %>% 
+  mutate(Test_Percentile = fct_collapse(factor(careerdata$x_per, levels=0:100), 
+                              `90-100` = c("100", "99", "98", "97", "96", "95", "94", "93", "92","91","90"), 
+                              `80-89` = c("89", "88", "87", "86", "85", "84", "83", "82", "81", "80"),
+                              `70-79` = c("79", "78", "77", "76", "75", "74", "73", "72", "71", "70"),
+                              `60-69` = c("69", "68", "67", "66", "65", "64", "63", "62", "61", "60"),
+                              `50-59` = c("59", "58", "57", "56", "55", "54", "53", "52", "51", "50"),
+                              `40-49` = c("49", "48", "47", "46", "45", "44", "43", "42", "41", "40"),
+                              `30-39` = c("39", "38", "37", "36", "35", "34", "33", "32", "31", "30"),
+                              `20-29` = c("29", "28", "27", "26", "25", "24", "23", "22", "21", "20"),
+                              `10-19` = c("19", "18", "17", "16", "15", "14", "13", "12", "11", "10"),
+                              `0-9` = c("9", "8", "7", "6", "5", "4", "3", "2", "1", "0")))%>%
+ group_by(Test_Percentile, Q48) %>%
+  summarise(N = length(x_per), Switcher = round((length(which(Switch == '1'))/length(x_per))*100,1)) 
+
+colnames(s7) <- c('Test_Percentile', 'Gender', 'N', 'Switcher %')
+s7$Test_Percentile <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89", "90-100")
+s7$Gender <- rep(c("Male", "Female"), 5)
+
+kable(s7) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
 ```
-
