@@ -36,53 +36,52 @@ data$Q3FUS=paste(data$Q3FUS_No, data$Q3FUS_Yes)
 Switcher Groups
 
 ```{r}
-s1 <- data %>% filter(Q26 == 1, Q3FUS_No == "No")
-s2 <- data %>% filter(Q26 == 3, Q3FUS_No == "No")
-s3 <- data %>% filter(is.na(Q26),Q5Post == 1, Q3FUS_No == "No")
-s4 <- data %>% filter(is.na(Q26),Q5Post == 3, Q3FUS_No == "No")
-s5 <- data %>% filter(Q26 == 1, Q3Post == 3, Q5Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
-s6 <- data %>% filter(Q26 ==1, Q3Post == 2, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
-s7 <- data %>% filter(Q26 == 3, Q5Post == 1, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
-s8 <- data %>% filter(Q26 == 3, Q3Post == 2, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
-s9 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3Post ==3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
-s10 <- data %>% filter(is.na(Q26), Q5Post ==1, Q3Post ==2, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
-s11 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post ==2, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+s1 <- data %>% filter(Q26 == 1, Q3FUS_No == "No") %>% mutate(Switch = 1)
+s2 <- data %>% filter(Q26 == 3, Q3FUS_No == "No") %>% mutate(Switch = 1)
+s3 <- data %>% filter(is.na(Q26),Q5Post == 1, Q3FUS_No == "No") %>% mutate(Switch = 1)
+s4 <- data %>% filter(is.na(Q26),Q5Post == 3, Q3FUS_No == "No") %>% mutate(Switch = 1)
+s5 <- data %>% filter(Q26 == 1, Q3Post == 3, Q5Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
+s6 <- data %>% filter(Q26 ==1, Q3Post == 2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
+s7 <- data %>% filter(Q26 == 3, Q5Post == 1, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
+s8 <- data %>% filter(Q26 == 3, Q3Post == 2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
+s9 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3Post ==3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
+s10 <- data %>% filter(is.na(Q26), Q5Post ==1, Q3Post ==2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
+s11 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post ==2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
 ```
 
 
 Persister Groups
 
 ```{r}
-p12 <- data %>% filter(Q26 == 1, Q3FUS_Yes == "Yes")
+p12 <- data %>% filter(Q26 == 1, Q3FUS_Yes == "Yes") %>% mutate(Switch = 0)
 
-p13 <- data %>% filter(Q26 == 3, Q3FUS_Yes == "Yes")
+p13 <- data %>% filter(Q26 == 3, Q3FUS_Yes == "Yes") %>% mutate(Switch = 0)
 
-p14 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3FUS_Yes == "Yes")
+p14 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3FUS_Yes == "Yes") %>% mutate(Switch = 0)
 
-p15 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3FUS_Yes == "Yes")
+p15 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3FUS_Yes == "Yes") %>% mutate(Switch = 0)
 
-p16 <- data %>% filter(Q26 == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+p16 <- data %>% filter(Q26 == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
 
-p17 <- data %>% filter(Q26 == 1, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+p17 <- data %>% filter(Q26 == 1, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
 
-p18 <- data %>% filter(Q26 == 1, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" )
+p18 <- data %>% filter(Q26 == 1, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" ) %>% mutate(Switch = 0)
 
-p19 <- data %>% filter(Q26 == 1, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+p19 <- data %>% filter(Q26 == 1, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
 
-p20 <- data %>% filter(Q26 == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+p20 <- data %>% filter(Q26 == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
+p21 <- data %>% filter(Q26 == 3, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
 
-p21 <- data %>% filter(Q26 == 3, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
 
+p22 <- data %>% filter(Q26 == 3, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")  %>% mutate(Switch = 0)
 
-p22 <- data %>% filter(Q26 == 3, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+p23 <- data %>% filter(Q26 == 3, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" )  %>% mutate(Switch = 0)
 
-p23 <- data %>% filter(Q26 == 3, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" ) 
+p24 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
 
-p24 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+p25 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
 
-p25 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
-
-p26 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")
+p26 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
 
 
 ```
@@ -233,5 +232,11 @@ careerdata <- careerdata %>%
                                           Q19Post_SpecificProblems+Q19Post_WorkTogether)))
 ```
 
+```{r}
+##S5
+s5 <- careerdata %>% group_by(major, Q48) %>% summarise(N = length(Q18), Switcher = round((length(which(Switch == '1'))/length(Q18))*100,1))
+colnames(s5) <- c('Major', 'Gender', 'N', 'Switcher %')
+s5
+```
 
 
