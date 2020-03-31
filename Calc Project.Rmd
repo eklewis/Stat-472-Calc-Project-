@@ -176,13 +176,15 @@ SC <- SC %>% mutate(Student.Cent = (rescale_load_sc[1,1]*Q19Post_AskQuestions + 
 #Make variables for Instructor quality and student centered practices
 IQcareer <- select(careerdata, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
 
+IQcareer$Q18Post_Discouraged <- 7-IQcareer$Q18Post_Discouraged
 
-careerdata <- careerdata %>% mutate(Inst.Qual = weighted.mean(IQcareer,rescale_load_iq[,1],na.rm=TRUE))
+SCcareer <- select(careerdata, Q19Post_AskQuestions, Q19Post_Discussion, Q19Post_ExplainThinking, Q19Post_Individually, Q19Post_Lecture,Q19Post_Presentations,Q19Post_SpecificProblems, Q19Post_WorkTogether)
 
+SCcareer$Q19Post_Lecture <- 7 - SCcareer$Q19Post_Lecture
 
-careerdata <- careerdata %>% 
-  mutate(Inst.Qual = (rescale_load_iq[1,1]*Q18Post_Applications+ rescale_load_iq[2,1]*Q18Post_Appointments+ rescale_load_iq[3,1]*Q18Post_AskedQs+ rescale_load_iq[4,1]*Q18Post_Discouraged+ rescale_load_iq[5,1]*Q18Post_Explanations+ rescale_load_iq[6,1]*Q18Post_Listened+ rescale_load_iq[7,1]*Q18Post_ProblemSolver+ rescale_load_iq[8,1]*Q18Post_Time)) %>% 
-  mutate(Student.Cent = (rescale_load_sc[1,1]*Q19Post_AskQuestions + rescale_load_sc[2,1]*Q19Post_Discussion + rescale_load_sc[3,1]*Q19Post_ExplainThinking + rescale_load_sc[4,1]*Q19Post_Individually + rescale_load_sc[5,1]*Q19Post_Lecture + rescale_load_sc[6,1]*Q19Post_Presentations + rescale_load_sc[7,1]*Q19Post_SpecificProblems + rescale_load_sc[8,1]*Q19Post_WorkTogether))
+careerdata <- careerdata %>% mutate(Inst.Qual = apply(IQcareer,1,weighted.mean,rescale_load_iq[,1],na.rm = TRUE))
+
+careerdata <- careerdata %>% mutate(Student.Cent = apply(SCcareer,1,weighted.mean,rescale_load_sc[,1],na.rm = TRUE))
 
 ##Make vairables for High school, college, and no experience
 ###CURRENTLY NOT CORRECT 
@@ -264,10 +266,34 @@ S8 (Jackson/Megan)
 
 ```{r}
 
-S8 <- careerdata %>% group_by(Q48) %>%
-  
+S8 <- careerdata %>% mutate(Instqual = I(Inst.Qual >= 5.5)*1 + I(Inst.Qual < 5.5 & Inst.Qual >= 4.5)*2 + I(Inst.Qual < 4.5 & Inst.Qual >= 3.5)*3 + I(Inst.Qual < 3.5 & Inst.Qual >= 2.5)*4 + I(Inst.Qual < 2.5 & Inst.Qual >= 1.5)*5 + I(Inst.Qual < 1.5 & Inst.Qual >= 1.0)*6 ) 
+
+S8 <- S8 %>% group_by(Instqual,Q48) %>% summarise(N = length(Q48) , Switcher = round((length(which(Switch == '1'))/length(Q48))*100,1) )
+
+colnames(S8) <- c('IQR', 'Gender', 'N', 'Switcher %')
+
+S8$`IQR` <- c("[5.5, 6]", "", "[4.5, 5.5)", "", "[3.5, 4.5)", "", "[2.5, 3.5)", "", "[1.5, 2.5)", "" , "[1, 1.5)", "")
+
+S8$Gender <- rep(c("Male", "Female"), 6) 
+
+S8s <- careerdata %>% mutate(StudCent = I(Student.Cent >= 5.5)*1 + I(Student.Cent < 5.5 & Student.Cent >= 4.5)*2 + I(Student.Cent < 4.5 & Student.Cent >= 3.5)*3 + I(Student.Cent < 3.5 & Student.Cent >= 2.5)*4 + I(Student.Cent < 2.5 & Student.Cent >= 1.5)*5 + I(Student.Cent < 1.5 & Student.Cent >= 1.0)*6 ) 
+
+S8s <- S8s %>% group_by(StudCent,Q48) %>% summarise(N = length(Q48) , Switcher = round((length(which(Switch == '1'))/length(Q48))*100,1) )
 
 
+
+colnames(S8s) <- c('SCIR', 'Gender ', 'N ', 'Switcher % ')
+
+S8s$`SCIR` <- c("[5.5, 6]", "", "[4.5, 5.5)", "", "[3.5, 4.5)", "", "[2.5, 3.5)", "", "[1.5, 2.5)", "" , "[1, 1.5)", "")
+
+S8s$`Gender ` <- rep(c("Male", "Female"), 6) 
+
+
+S8 <- cbind(S8, S8s)
+
+
+
+kable(S8)  %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = T)
 
 
 
