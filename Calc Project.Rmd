@@ -221,6 +221,7 @@ SC <- SC %>% mutate(Student.Cent = (rescale_load_sc[,1]*(Q19Post_AskQuestions + 
 ```
 
 ```{r}
+#Make variables for Instructor quality and student centered practices
 careerdata <- careerdata %>% 
   mutate(Inst.Qual = (rescale_load_iq[,1]*(Q18Post_Applications+ Q18Post_Appointments+
                                              Q18Post_AskedQs+ Q18Post_Discouraged+
@@ -230,13 +231,25 @@ careerdata <- careerdata %>%
                                               Q19Post_ExplainThinking+Q19Post_Individually
                                               +Q19Post_Lecture + Q19Post_Presentations +
                                           Q19Post_SpecificProblems+Q19Post_WorkTogether)))
+
+##Make vairables for High school, college, and no experience
+###CURRENTLY NOT CORRECT 
+try <- careerdata %>% mutate(HighSchoolExp = as.numeric(I(Q15_CalculusNonAPFinalGrade %in% seq(1,12,1) | Q17_CalculusABFinalGrade %in% seq(1,12,1) | Q17_CalculusBCFinalGrade %in% seq(1,12,1)))) %>% mutate(CollegeExp = I(Q18 == 1)) %>% 
+  mutate(NoExp = I(is.na(Q15_CalculusNonAPFinalGrade) & 
+                     is.na(Q17_CalculusABFinalGrade) & 
+                     is.na(Q17_CalculusBCFinalGrade) & 
+                     is.na(Q18)))
+
 ```
 
 ```{r}
 ##S5
 s5 <- careerdata %>% group_by(major, Q48) %>% summarise(N = length(Q18), Switcher = round((length(which(Switch == '1'))/length(Q18))*100,1))
 colnames(s5) <- c('Major', 'Gender', 'N', 'Switcher %')
-s5
+s5$Major <- c("Pre-Med", "Pre-Med", "STEM", "STEM", "Engineering", "Engineering", "Non-STEM", "Non-STEM", "Undecided", "Undecided")
+s5$Gender <- rep(c("Male", "Female"), 5)
+
+kable(s5) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
 
 
