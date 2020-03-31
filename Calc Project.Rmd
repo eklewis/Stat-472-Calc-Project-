@@ -119,7 +119,7 @@ careerdata <- switchdata %>%
   
   filter(! (is.na(Q18Post_Applications) & is.na(Q18Post_Appointments) & is.na(Q18Post_AskedQs)
             & is.na(Q18Post_Discouraged) & is.na(Q18Post_Explanations) &
-              is.na(Q18Post_Listened) &         is.na(Q18Post_ProblemSolver) &
+              is.na(Q18Post_Listened) & is.na(Q18Post_ProblemSolver) &
               is.na(Q18Post_Time))) %>% #filer instruc qual
   
 filter(! (is.na(Q19Post_SpecificProblems) & is.na(Q19Post_WorkTogether) &
@@ -147,7 +147,7 @@ rescale_load_iq <- pr_IQ$loadings/sum(pr_IQ$loadings[,1])
 
 round(rescale_load_iq[,1],3)
 
-IQ <- IQ %>% mutate(Inst.Qual = (rescale_load_iq[1,1]*Q18Post_Applications+ rescale_load_iq[2,1]*Q18Post_Appointments+ rescale_load_iq[3,1]*Q18Post_AskedQs+ rescale_load_iq[4,1]*Q18Post_Discouraged+ rescale_load_iq[5,1]*Q18Post_Explanations+ rescale_load_iq[6,1]*Q18Post_Listened+ rescale_load_iq[7,1]*Q18Post_ProblemSolver+ rescale_load_iq[8,1]*Q18Post_Time)) 
+#IQ <- IQ %>% mutate(Inst.Qual = (rescale_load_iq[1,1]*Q18Post_Applications+ rescale_load_iq[2,1]*Q18Post_Appointments+ rescale_load_iq[3,1]*Q18Post_AskedQs+ rescale_load_iq[4,1]*Q18Post_Discouraged+ rescale_load_iq[5,1]*Q18Post_Explanations+ rescale_load_iq[6,1]*Q18Post_Listened+ rescale_load_iq[7,1]*Q18Post_ProblemSolver+ rescale_load_iq[8,1]*Q18Post_Time)) 
 
 ```
 
@@ -174,15 +174,15 @@ SC <- SC %>% mutate(Student.Cent = (rescale_load_sc[1,1]*Q19Post_AskQuestions + 
 
 ```{r}
 #Make variables for Instructor quality and student centered practices
+IQcareer <- select(careerdata, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
+
+
+careerdata <- careerdata %>% mutate(Inst.Qual = weighted.mean(IQcareer,rescale_load_iq[,1],na.rm=TRUE))
+
+
 careerdata <- careerdata %>% 
-  mutate(Inst.Qual = (rescale_load_iq[,1]*(Q18Post_Applications+ Q18Post_Appointments+
-                                             Q18Post_AskedQs+ Q18Post_Discouraged+
-                                             Q18Post_Explanations+ Q18Post_Listened+ 
-                                             Q18Post_ProblemSolver+ Q18Post_Time))) %>% 
-  mutate(Student.Cent = (rescale_load_sc[,1]*(Q19Post_AskQuestions + Q19Post_Discussion +
-                                              Q19Post_ExplainThinking+Q19Post_Individually
-                                              +Q19Post_Lecture + Q19Post_Presentations +
-                                          Q19Post_SpecificProblems+Q19Post_WorkTogether)))
+  mutate(Inst.Qual = (rescale_load_iq[1,1]*Q18Post_Applications+ rescale_load_iq[2,1]*Q18Post_Appointments+ rescale_load_iq[3,1]*Q18Post_AskedQs+ rescale_load_iq[4,1]*Q18Post_Discouraged+ rescale_load_iq[5,1]*Q18Post_Explanations+ rescale_load_iq[6,1]*Q18Post_Listened+ rescale_load_iq[7,1]*Q18Post_ProblemSolver+ rescale_load_iq[8,1]*Q18Post_Time)) %>% 
+  mutate(Student.Cent = (rescale_load_sc[1,1]*Q19Post_AskQuestions + rescale_load_sc[2,1]*Q19Post_Discussion + rescale_load_sc[3,1]*Q19Post_ExplainThinking + rescale_load_sc[4,1]*Q19Post_Individually + rescale_load_sc[5,1]*Q19Post_Lecture + rescale_load_sc[6,1]*Q19Post_Presentations + rescale_load_sc[7,1]*Q19Post_SpecificProblems + rescale_load_sc[8,1]*Q19Post_WorkTogether))
 
 ##Make vairables for High school, college, and no experience
 ###CURRENTLY NOT CORRECT 
@@ -265,8 +265,7 @@ S8 (Jackson/Megan)
 ```{r}
 
 S8 <- careerdata %>% group_by(Q48) %>%
-  Inst.Qual <= 6 & Inst.Qual > 5.5
-  Inst.Qual <= 5.5 & Inst.Qual > 4.5
+  
 
 
 
