@@ -293,7 +293,7 @@ S8 <- cbind(S8, S8s)
 
 
 
-kable(S8)  %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = T)
+kable(S8,caption = "S8 Table")  %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = T,  )
 
 
 
@@ -301,7 +301,7 @@ kable(S8)  %>% kable_styling(bootstrap_options = c("striped", "hover", "condense
 
 S7 (Emma)
 
-```{r}
+```{r , eval=F}
 X_SAT=careerdata$Q3_SATMath
 SAT=rev(seq(200,800,by=10))
 SAT_per=c(99,99, 99, 98, 97,97,96,95,95,94,93,91,90,88,87,85,83,82,79,77,75,73,70,67,64,62,59,55,52, 49,45,42,40,36,33,30,27,24,21,19,16,14,12,10,9, 7,6,5,4,3,3,2,2,1,1,1,1,1,0,0,0)
