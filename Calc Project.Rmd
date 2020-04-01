@@ -261,8 +261,8 @@ S6 (Amanda)
 ```{r}
 #S6
 s6 <- careerdata %>% group_by(X, Q48) %>% summarise(N = length(Q18), Switcher = round((length(which(Switch == '1'))/length(Q18))*100,1))
-colnames(s5) <- c('Previous Calculus', 'Gender', 'N', 'Switcher %')
-s6$`Previous Calculus` <- c("High School", "College", "None")
+colnames(s6) <- c('Previous Calculus', 'Gender', 'N', 'Switcher %')
+s6$`Previous Calculus` <- c("High School", "", "College", "", "None", "")
 s6$Gender <- rep(c("Male", "Female"), 5)
 
 kable(s6) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
