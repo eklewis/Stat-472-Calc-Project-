@@ -343,3 +343,20 @@ colnames(s7) <- c('Test_Percentile', 'Gender', 'N', 'Switcher %')
 kable(s7) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
 ```
+
+
+```{r}
+S7 <- careerdata %>% mutate(Test_Per = I(x_per >= 90)*1 + I(x_per >= 80 & x_per < 90)*2 + I(x_per >= 70 & x_per < 80)*3 + I(x_per >= 60 & x_per < 70)*4 + I(x_per >= 50 & x_per < 60)*5 + I(x_per >= 40 & x_per < 50)*6 + I(x_per >= 30 & x_per < 40)*7 + I(x_per >= 20 & x_per < 30)*8 + I(x_per >= 10 & x_per < 20)*9+ I(x_per >= 0 & x_per < 10)*10) %>%
+
+group_by(Test_Per, Q48) %>%
+  summarise(N = length(x_per), Switcher = round((length(which(Switch == '1'))/length(x_per))*100,1)) 
+
+colnames(S7) <- c('Test_Percentile', 'Gender', 'N', 'Switcher %')
+#s7$Test_Percentile <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89", "90-100")
+#s7$Gender <- rep(c("Male", "Female"), 5)
+
+kable(S7) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+
+```
+
