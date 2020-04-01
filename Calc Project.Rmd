@@ -167,7 +167,7 @@ rescale_load_sc <- pr_SC$loadings/sum(pr_SC$loadings[,1])
 
 round(rescale_load_sc[,1],3)
 
-SC <- SC %>% mutate(Student.Cent = (rescale_load_sc[1,1]*Q19Post_AskQuestions + rescale_load_sc[2,1]*Q19Post_Discussion + rescale_load_sc[3,1]*Q19Post_ExplainThinking + rescale_load_sc[4,1]*Q19Post_Individually + rescale_load_sc[5,1]*Q19Post_Lecture + rescale_load_sc[6,1]*Q19Post_Presentations + rescale_load_sc[7,1]*Q19Post_SpecificProblems + rescale_load_sc[8,1]*Q19Post_WorkTogether))
+#SC <- SC %>% mutate(Student.Cent = (rescale_load_sc[1,1]*Q19Post_AskQuestions + rescale_load_sc[2,1]*Q19Post_Discussion + rescale_load_sc[3,1]*Q19Post_ExplainThinking + rescale_load_sc[4,1]*Q19Post_Individually + rescale_load_sc[5,1]*Q19Post_Lecture + rescale_load_sc[6,1]*Q19Post_Presentations + rescale_load_sc[7,1]*Q19Post_SpecificProblems + rescale_load_sc[8,1]*Q19Post_WorkTogether))
 
 
 ```
@@ -346,6 +346,24 @@ kable(s7) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed
 
 
 ```{r}
+X_SAT=careerdata$Q3_SATMath
+SAT=rev(seq(200,800,by=10))
+SAT_per=c(99,99, 99, 98, 97,97,96,95,95,94,93,91,90,88,87,85,83,82,79,77,75,73,70,67,64,62,59,55,52, 49,45,42,40,36,33,30,27,24,21,19,16,14,12,10,9, 7,6,5,4,3,3,2,2,1,1,1,1,1,0,0,0)
+
+X_ACT=careerdata$Q7_ACTMath
+ACT=36:1
+ACT_per=c(99,99,99,98,97,96,95,93,91,88,84,79,73,67,61,56,52,47,42,36,27,15,6,2)
+ACT_per=c(ACT_per, rep(1,length(ACT)-length(ACT_per)))
+
+X_SAT=SAT_per[match(X_SAT, SAT)]
+
+X_ACT= ACT_per[match(X_ACT, ACT)]
+
+
+#head(careerdata)
+
+careerdata$x_per=rowMeans(cbind(X_SAT, X_ACT), na.rm=TRUE)
+
 S7 <- careerdata %>% mutate(Test_Per = I(x_per >= 90)*1 + I(x_per >= 80 & x_per < 90)*2 + I(x_per >= 70 & x_per < 80)*3 + I(x_per >= 60 & x_per < 70)*4 + I(x_per >= 50 & x_per < 60)*5 + I(x_per >= 40 & x_per < 50)*6 + I(x_per >= 30 & x_per < 40)*7 + I(x_per >= 20 & x_per < 30)*8 + I(x_per >= 10 & x_per < 20)*9+ I(x_per >= 0 & x_per < 10)*10) %>%
 
 group_by(Test_Per, Q48) %>%
@@ -357,6 +375,22 @@ S7$Gender <- rep(c("Male", "Female"), 10)
 
 kable(S7) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
+
+```
+
+
+```{r}
+
+S6 <- careerdata %>% mutate(Prev_Calc = I((!(is.na(careerdata$Q15_CalculusNonAPFinalGrade)) | !(is.na(careerdata$Q17_CalculusABFinalGrade)) |  !(is.na(careerdata$Q17_CalculusBCFinalGrade))) & (careerdata$Q18 == 2 | is.na(careerdata$Q18) ))*1 
+                            
+                            + I(careerdata$Q18 == 1 & !is.na(careerdata$Q18))*2 + 
+                              
+                              I((is.na(careerdata$Q15_CalculusNonAPFinalGrade)) & (is.na(careerdata$Q17_CalculusABFinalGrade)) &  (is.na(careerdata$Q17_CalculusBCFinalGrade)) & (careerdata$Q18 == 2 | is.na(careerdata$Q18)) )*3) %>%
+  
+  group_by(Prev_Calc,Q48) %>%
+  summarise(N = length(Prev_Calc), Switcher = round((length(which(Switch == '1'))/length(x_per))*100,1))
+
+kable(S6) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
 ```
 
