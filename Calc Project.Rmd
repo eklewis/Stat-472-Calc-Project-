@@ -316,7 +316,7 @@ kable(S8)  %>% kable_styling(bootstrap_options = c("striped", "hover", "condense
 
 ```
 
-S7 (Emma)
+S7
 
 ```{r , eval=F, echo=F}
 X_SAT=careerdata$Q3_SATMath
@@ -360,6 +360,7 @@ kable(s7) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed
 
 ```
 
+# S7
 
 ```{r}
 X_SAT=careerdata$Q3_SATMath
