@@ -2,7 +2,9 @@
 title: "Stat 472 Calc Project"
 author: "Emma, Jackson, Amanda, Megan"
 date: "3/3/2020"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 1. Data required for the Calculus retention study is in S1 File in the Supporting Information section of the paper. S2 File has information about the survey questions and response codings in the data set. Load the data and understand each column.
