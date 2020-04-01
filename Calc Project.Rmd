@@ -293,7 +293,8 @@ S8 <- cbind(S8, S8s)
 
 
 
-kable(S8,caption = "S8 Table")  %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = T,  )
+kable(S8)  %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = T) %>%
+  footnote(general = c("IQR = Instructor Quality Response","SCIR = Student-Centered Instruction Response"))
 
 
 
