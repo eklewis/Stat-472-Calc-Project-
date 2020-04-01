@@ -11,6 +11,7 @@ output:
 
 
 ```{r echo=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, tidy = TRUE)
 #install.packages("dplyr")
 #install.packages("tidyr")
 #install.packages("knitr")
@@ -270,7 +271,7 @@ s6 <- careerdata %>% mutate(Prev_Calc = I((!(is.na(careerdata$Q15_CalculusNonAPF
                               I((is.na(careerdata$Q15_CalculusNonAPFinalGrade)) & (is.na(careerdata$Q17_CalculusABFinalGrade)) &  (is.na(careerdata$Q17_CalculusBCFinalGrade)) & (careerdata$Q18 == 2 | is.na(careerdata$Q18)) )*3) %>%
   
   group_by(Prev_Calc,Q48) %>%
-  summarise(N = length(Prev_Calc), Switcher = round((length(which(Switch == '1'))/length(x_per))*100,1))
+  summarise(N = length(Prev_Calc), Switcher = round((length(which(Switch == '1'))/length(Prev_Calc))*100,1))
 
 
 colnames(s6) <- c('Previous Calculus', 'Gender', 'N', 'Switcher %')
@@ -320,7 +321,11 @@ kable(S8)  %>% kable_styling(bootstrap_options = c("striped", "hover", "condense
 
 S7 (Emma)
 
+<<<<<<< HEAD
 ```{r}
+=======
+```{r , eval=F, echo=F}
+>>>>>>> b0c87efea123a4952fcca44c95cd346655bfff32
 X_SAT=careerdata$Q3_SATMath
 SAT=rev(seq(200,800,by=10))
 SAT_per=c(99,99, 99, 98, 97,97,96,95,95,94,93,91,90,88,87,85,83,82,79,77,75,73,70,67,64,62,59,55,52, 49,45,42,40,36,33,30,27,24,21,19,16,14,12,10,9, 7,6,5,4,3,3,2,2,1,1,1,1,1,0,0,0)
@@ -409,6 +414,12 @@ S6 <- careerdata %>% mutate(Prev_Calc = I((!(is.na(careerdata$Q15_CalculusNonAPF
   summarise(N = length(Prev_Calc), Switcher = round((length(which(Switch == '1'))/length(x_per))*100,1))
 
 kable(S6) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+```
+
+# Appendix
+
+```{r show-code, ref.label = all_labels(),  echo = TRUE, eval = FALSE}
 
 ```
 
