@@ -260,10 +260,20 @@ S6 (Amanda)
 
 ```{r}
 #S6
-s6 <- careerdata %>% group_by(X, Q48) %>% summarise(N = length(Q18), Switcher = round((length(which(Switch == '1'))/length(Q18))*100,1))
+
+s6 <- careerdata %>% mutate(Prev_Calc = I((!(is.na(careerdata$Q15_CalculusNonAPFinalGrade)) | !(is.na(careerdata$Q17_CalculusABFinalGrade)) |  !(is.na(careerdata$Q17_CalculusBCFinalGrade))) & (careerdata$Q18 == 2 | is.na(careerdata$Q18) ))*1 
+                            
+                            + I(careerdata$Q18 == 1 & !is.na(careerdata$Q18))*2 + 
+                              
+                              I((is.na(careerdata$Q15_CalculusNonAPFinalGrade)) & (is.na(careerdata$Q17_CalculusABFinalGrade)) &  (is.na(careerdata$Q17_CalculusBCFinalGrade)) & (careerdata$Q18 == 2 | is.na(careerdata$Q18)) )*3) %>%
+  
+  group_by(Prev_Calc,Q48) %>%
+  summarise(N = length(Prev_Calc), Switcher = round((length(which(Switch == '1'))/length(x_per))*100,1))
+
+
 colnames(s6) <- c('Previous Calculus', 'Gender', 'N', 'Switcher %')
 s6$`Previous Calculus` <- c("High School", "", "College", "", "None", "")
-s6$Gender <- rep(c("Male", "Female"), 5)
+s6$Gender <- rep(c("Male", "Female"), 3)
 
 kable(s6) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
