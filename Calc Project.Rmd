@@ -27,6 +27,7 @@ library(tidyr)
 library(knitr)
 library(kableExtra)
 library(forcats)
+library(ggplot2)
 ```
 
 
@@ -403,7 +404,7 @@ kable(S7) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed
 
 
 ```{r}
-<<<<<<< HEAD
+
 calcdata <- careerdata %>% mutate(Prev_Calc = I((!(is.na(careerdata$Q15_CalculusNonAPFinalGrade)) 
                                            | !(is.na(careerdata$Q17_CalculusABFinalGrade)) 
                                            |  !(is.na(careerdata$Q17_CalculusBCFinalGrade))) 
@@ -427,32 +428,37 @@ library("mlmRev")
 
 model <- glm(calcdata$Switch ~ calcdata$Prev_Calc + calcdata$major + calcdata$x_per + calcdata$Inst.Qual + calcdata$Student.Cent + calcdata$Q48)
 
+con <- confint(model)
+conNoInt <- con[-1,]
 
-
+model$coefficients
 #summary(model)
 
+label <- c("College Calc", "No Previos Calc", "STEM", "Engineer","Non-STEM","Undecided","Std Test", "Instructor Qual", "Student Centered", "Female")
+mean <- exp((model$coefficients[-1]/(1-model$coefficients[-1])))
+lower <- exp((conNoInt[,-2]/(1-conNoInt[,-2])))
+upper <- exp((conNoInt[,-1]/(1-conNoInt[,-1])))
+
+
+df <- data.frame(label, mean, lower, upper)
+
+# reverses the factor level ordering for labels after coord_flip()
+df$label <- factor(df$label, levels=rev(df$label))
+
+
+fp <- ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper)) +
+        geom_pointrange() + 
+        geom_hline(yintercept=1, lty=2) +  # add a dotted line at x=1 after flip
+        coord_flip() +  # flip coordinates (puts labels on y axis)
+        xlab("Label") + ylab("Odds Ratio") +
+        theme_bw() +  # use a white background
+        scale_y_continuous(limits=c(0,6))
+print(fp)
 
 
 ```
 
 
-
-=======
-
-S6 <- careerdata %>% mutate(Prev_Calc = I((!(is.na(careerdata$Q15_CalculusNonAPFinalGrade)) | !(is.na(careerdata$Q17_CalculusABFinalGrade)) |  !(is.na(careerdata$Q17_CalculusBCFinalGrade))) & (careerdata$Q18 == 2 | is.na(careerdata$Q18) ))*1 
-                            
-                            + I(careerdata$Q18 == 1 & !is.na(careerdata$Q18))*2 + 
-                              
-                              I((is.na(careerdata$Q15_CalculusNonAPFinalGrade)) & (is.na(careerdata$Q17_CalculusABFinalGrade)) &  (is.na(careerdata$Q17_CalculusBCFinalGrade)) & (careerdata$Q18 == 2 | is.na(careerdata$Q18)) )*3) %>%
-  
-  group_by(Prev_Calc,Q48) %>%
-  summarise(N = length(Prev_Calc), Switcher = round((length(which(Switch == '1'))/length(x_per))*100,1))
-
-kable(S6) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
-
-```
-
->>>>>>> 8c78a507bc8f3f6ea6bf03553d3f987b198860bd
 # Appendix
 
 ```{r show-code, ref.label = all_labels(),  echo = TRUE, eval = FALSE}
