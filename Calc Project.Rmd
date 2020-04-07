@@ -28,6 +28,8 @@ library(knitr)
 library(kableExtra)
 library(forcats)
 library(ggplot2)
+library(mlmRev)
+library(lme4)
 ```
 
 
@@ -424,9 +426,9 @@ calcdata$Prev_Calc <- as.factor(calcdata$Prev_Calc)
 
 ```{r}
 
-library("mlmRev")
+mixM <- glmer(Switch ~ (1|Prev_Calc) + (1|major) + (1|x_per) + (1|Inst.Qual) + (1|Student.Cent) + (1|Q48), data = calcdata , family = "binomial") 
 
-model <- glm(calcdata$Switch ~ calcdata$Prev_Calc + calcdata$major + calcdata$x_per + calcdata$Inst.Qual + calcdata$Student.Cent + calcdata$Q48)
+summary(mixM)
 
 con <- confint(model)
 conNoInt <- con[-1,]
