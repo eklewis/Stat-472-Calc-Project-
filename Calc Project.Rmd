@@ -3,10 +3,7 @@ title: "Stat 472 Calc Project"
 author: "Emma, Jackson, Amanda, Megan"
 date: "3/3/2020"
 output:
-<<<<<<< HEAD
   pdf_document: default
-=======
->>>>>>> 8c78a507bc8f3f6ea6bf03553d3f987b198860bd
   html_document:
     df_print: paged
 ---
@@ -424,7 +421,7 @@ calcdata$Prev_Calc <- as.factor(calcdata$Prev_Calc)
 
 ```{r}
 
-library("mlmRev")
+#library("mlmRev")
 
 model <- glm(calcdata$Switch ~ calcdata$Prev_Calc + calcdata$major + calcdata$x_per + calcdata$Inst.Qual + calcdata$Student.Cent + calcdata$Q48)
 
