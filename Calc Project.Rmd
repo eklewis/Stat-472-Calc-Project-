@@ -426,6 +426,8 @@ calcdata$Prev_Calc <- as.factor(calcdata$Prev_Calc)
 
 mixM <- glmer(Switch ~ (1|Prev_Calc) + (1|major) + (1|x_per) + (1|Inst.Qual) + (1|Student.Cent) + (1|Q48), data = calcdata , family = "binomial") 
 
+try <- glmer(Switch ~ Prev_Calc + major + x_per + Inst.Qual + Student.Cent + Q48 + (1|Institution), data = calcdata , family = "binomial") ## we get a convergence issue with this so i think it might be on the right track cause the homework says we will get that i think?
+
 summary(mixM)
 
 con <- confint(model)
