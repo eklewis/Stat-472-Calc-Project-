@@ -423,11 +423,8 @@ calcdata$Prev_Calc <- as.factor(calcdata$Prev_Calc)
 
 ```{r}
 
-<<<<<<< HEAD
+
 mixM <- glmer(Switch ~ (1|Prev_Calc) + (1|major) + (1|x_per) + (1|Inst.Qual) + (1|Student.Cent) + (1|Q48), data = calcdata , family = "binomial") 
-=======
-#library("mlmRev")
->>>>>>> 40d3b6a01a2d7334904e520414850288cadab6c1
 
 summary(mixM)
 
