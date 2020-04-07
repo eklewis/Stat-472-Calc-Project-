@@ -24,6 +24,9 @@ library(tidyr)
 library(knitr)
 library(kableExtra)
 library(forcats)
+library(ggplot2)
+library(mlmRev)
+library(lme4)
 ```
 
 
@@ -401,18 +404,60 @@ kable(S7) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed
 
 ```{r}
 
-S6 <- careerdata %>% mutate(Prev_Calc = I((!(is.na(careerdata$Q15_CalculusNonAPFinalGrade)) | !(is.na(careerdata$Q17_CalculusABFinalGrade)) |  !(is.na(careerdata$Q17_CalculusBCFinalGrade))) & (careerdata$Q18 == 2 | is.na(careerdata$Q18) ))*1 
+calcdata <- careerdata %>% mutate(Prev_Calc = I((!(is.na(careerdata$Q15_CalculusNonAPFinalGrade)) 
+                                           | !(is.na(careerdata$Q17_CalculusABFinalGrade)) 
+                                           |  !(is.na(careerdata$Q17_CalculusBCFinalGrade))) 
+                                          & (careerdata$Q18 == 2 | is.na(careerdata$Q18) ))*1 
                             
-                            + I(careerdata$Q18 == 1 & !is.na(careerdata$Q18))*2 + 
-                              
-                              I((is.na(careerdata$Q15_CalculusNonAPFinalGrade)) & (is.na(careerdata$Q17_CalculusABFinalGrade)) &  (is.na(careerdata$Q17_CalculusBCFinalGrade)) & (careerdata$Q18 == 2 | is.na(careerdata$Q18)) )*3) %>%
-  
-  group_by(Prev_Calc,Q48) %>%
-  summarise(N = length(Prev_Calc), Switcher = round((length(which(Switch == '1'))/length(x_per))*100,1))
+                            + I(careerdata$Q18 == 1 & !is.na(careerdata$Q18))*2 
+                            
+                            + I((is.na(careerdata$Q15_CalculusNonAPFinalGrade)) 
+                                & (is.na(careerdata$Q17_CalculusABFinalGrade)) 
+                                &  (is.na(careerdata$Q17_CalculusBCFinalGrade)) 
+                                & (careerdata$Q18 == 2 | is.na(careerdata$Q18)) )*3)
 
-kable(S6) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+calcdata$Prev_Calc <- as.factor(calcdata$Prev_Calc)
 
 ```
+
+
+```{r}
+
+
+mixM <- glmer(Switch ~ (1|Prev_Calc) + (1|major) + (1|x_per) + (1|Inst.Qual) + (1|Student.Cent) + (1|Q48), data = calcdata , family = "binomial") 
+
+summary(mixM)
+
+con <- confint(model)
+conNoInt <- con[-1,]
+
+model$coefficients
+#summary(model)
+
+label <- c("College Calc", "No Previos Calc", "STEM", "Engineer","Non-STEM","Undecided","Std Test", "Instructor Qual", "Student Centered", "Female")
+mean <- exp((model$coefficients[-1]/(1-model$coefficients[-1])))
+lower <- exp((conNoInt[,-2]/(1-conNoInt[,-2])))
+upper <- exp((conNoInt[,-1]/(1-conNoInt[,-1])))
+
+
+df <- data.frame(label, mean, lower, upper)
+
+# reverses the factor level ordering for labels after coord_flip()
+df$label <- factor(df$label, levels=rev(df$label))
+
+
+fp <- ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper)) +
+        geom_pointrange() + 
+        geom_hline(yintercept=1, lty=2) +  # add a dotted line at x=1 after flip
+        coord_flip() +  # flip coordinates (puts labels on y axis)
+        xlab("Label") + ylab("Odds Ratio") +
+        theme_bw() +  # use a white background
+        scale_y_continuous(limits=c(0,6))
+print(fp)
+
+
+```
+
 
 # Appendix
 
