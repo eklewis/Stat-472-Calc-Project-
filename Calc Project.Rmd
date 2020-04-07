@@ -418,28 +418,26 @@ calcdata <- careerdata %>% mutate(Prev_Calc = I((!(is.na(careerdata$Q15_Calculus
 
 calcdata$Prev_Calc <- as.factor(calcdata$Prev_Calc)
 
+calcdata$major <- relevel(calcdata$major, ref = "1")
+
 ```
 
 
 ```{r}
 
+mixM <- glmer(Switch ~ Prev_Calc + major + x_per + Inst.Qual + Student.Cent + Q48 + (1|Institution), data = calcdata, family = "binomial", nAGQ = 10, control = glmerControl("bobyqa", check.conv.grad = .makeCC("warning",tol = 1e-2))) 
 
-mixM <- glmer(Switch ~ (1|Prev_Calc) + (1|major) + (1|x_per) + (1|Inst.Qual) + (1|Student.Cent) + (1|Q48), data = calcdata , family = "binomial") 
+sumMixM <- summary(mixM)
 
-try <- glmer(Switch ~ Prev_Calc + major + x_per + Inst.Qual + Student.Cent + Q48 + (1|Institution), data = calcdata , family = "binomial") ## we get a convergence issue with this so i think it might be on the right track cause the homework says we will get that i think?
+lower <- exp(sumMixM$coefficients[,1] - qnorm(.975) * sumMixM$coefficients[,2])
+mean <- exp(sumMixM$coefficients[,1])
+upper <- exp(sumMixM$coefficients[,1] + qnorm(.975) * sumMixM$coefficients[,2])
 
-summary(mixM)
+lower <- lower[-1]
+mean <- mean[-1]
+upper <- upper[-1]
 
-con <- confint(model)
-conNoInt <- con[-1,]
-
-model$coefficients
-#summary(model)
-
-label <- c("College Calc", "No Previos Calc", "STEM", "Engineer","Non-STEM","Undecided","Std Test", "Instructor Qual", "Student Centered", "Female")
-mean <- exp((model$coefficients[-1]/(1-model$coefficients[-1])))
-lower <- exp((conNoInt[,-2]/(1-conNoInt[,-2])))
-upper <- exp((conNoInt[,-1]/(1-conNoInt[,-1])))
+label <- c("College Calc", "No Previos Calc", "Pre-Med", "Engineer","Non-STEM","Undecided","Std Test", "Instructor Qual", "Student Centered", "Female")
 
 
 df <- data.frame(label, mean, lower, upper)
@@ -454,7 +452,7 @@ fp <- ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper)) +
         coord_flip() +  # flip coordinates (puts labels on y axis)
         xlab("Label") + ylab("Odds Ratio") +
         theme_bw() +  # use a white background
-        scale_y_continuous(limits=c(0,6))
+        scale_y_continuous(limits=c(0,7))
 print(fp)
 
 
