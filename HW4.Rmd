@@ -28,49 +28,101 @@ data$Q3FUS=paste(data$Q3FUS_No, data$Q3FUS_Yes)
 ```
 
 ```{r switcher}
-s1 <- data %>% filter(Q26 == 1, Q3FUS_No == "No") %>% mutate(Switch = 1)
-s2 <- data %>% filter(Q26 == 3, Q3FUS_No == "No") %>% mutate(Switch = 1)
-s3 <- data %>% filter(is.na(Q26),Q5Post == 1, Q3FUS_No == "No") %>% mutate(Switch = 1)
-s4 <- data %>% filter(is.na(Q26),Q5Post == 3, Q3FUS_No == "No") %>% mutate(Switch = 1)
-s5 <- data %>% filter(Q26 == 1, Q3Post == 3, Q5Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
-s6 <- data %>% filter(Q26 ==1, Q3Post == 2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
-s7 <- data %>% filter(Q26 == 3, Q5Post == 1, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
-s8 <- data %>% filter(Q26 == 3, Q3Post == 2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
-s9 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3Post ==3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
-s10 <- data %>% filter(is.na(Q26), Q5Post ==1, Q3Post ==2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
-s11 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post ==2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 1)
+s1 <- data %>% 
+  filter(Q26 == 1, Q3FUS_No == "No") %>% 
+  mutate(Switch = 1)
+s2 <- data %>% 
+  filter(Q26 == 3, Q3FUS_No == "No") %>% 
+  mutate(Switch = 1)
+s3 <- data %>% 
+  filter(is.na(Q26),Q5Post == 1, Q3FUS_No == "No") %>%
+  mutate(Switch = 1)
+s4 <- data %>% 
+  filter(is.na(Q26),Q5Post == 3, Q3FUS_No == "No") %>%
+  mutate(Switch = 1)
+s5 <- data %>% 
+  filter(Q26 == 1, Q3Post == 3, Q5Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% 
+  mutate(Switch = 1)
+s6 <- data %>% 
+  filter(Q26 ==1, Q3Post == 2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 1)
+s7 <- data %>% 
+  filter(Q26 == 3, Q5Post == 1, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% 
+  mutate(Switch = 1)
+s8 <- data %>% 
+  filter(Q26 == 3, Q3Post == 2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% 
+  mutate(Switch = 1)
+s9 <- data %>%
+  filter(is.na(Q26), Q5Post == 1, Q3Post ==3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 1)
+s10 <- data %>% 
+  filter(is.na(Q26), Q5Post ==1, Q3Post ==2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% 
+  mutate(Switch = 1)
+s11 <- data %>%
+  filter(is.na(Q26), Q5Post == 3, Q3Post ==2, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 1)
 ```
 
 ```{r persister}
-p12 <- data %>% filter(Q26 == 1, Q3FUS_Yes == "Yes") %>% mutate(Switch = 0)
+p12 <- data %>%
+  filter(Q26 == 1, Q3FUS_Yes == "Yes") %>% 
+  mutate(Switch = 0)
 
-p13 <- data %>% filter(Q26 == 3, Q3FUS_Yes == "Yes") %>% mutate(Switch = 0)
+p13 <- data %>% 
+  filter(Q26 == 3, Q3FUS_Yes == "Yes") %>% 
+  mutate(Switch = 0)
 
-p14 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3FUS_Yes == "Yes") %>% mutate(Switch = 0)
+p14 <- data %>%
+  filter(is.na(Q26), Q5Post == 1, Q3FUS_Yes == "Yes") %>%
+  mutate(Switch = 0)
 
-p15 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3FUS_Yes == "Yes") %>% mutate(Switch = 0)
+p15 <- data %>% 
+  filter(is.na(Q26), Q5Post == 3, Q3FUS_Yes == "Yes") %>% 
+  mutate(Switch = 0)
 
-p16 <- data %>% filter(Q26 == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
+p16 <- data %>%
+  filter(Q26 == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 0)
 
-p17 <- data %>% filter(Q26 == 1, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
+p17 <- data %>% 
+  filter(Q26 == 1, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 0)
 
-p18 <- data %>% filter(Q26 == 1, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" ) %>% mutate(Switch = 0)
+p18 <- data %>% 
+  filter(Q26 == 1, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" ) %>%
+  mutate(Switch = 0)
 
-p19 <- data %>% filter(Q26 == 1, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
+p19 <- data %>% 
+  filter(Q26 == 1, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 0)
 
-p20 <- data %>% filter(Q26 == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
-p21 <- data %>% filter(Q26 == 3, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
+p20 <- data %>%
+  filter(Q26 == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 0)
+p21 <- data %>% 
+  filter(Q26 == 3, Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 0)
 
 
-p22 <- data %>% filter(Q26 == 3, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")  %>% mutate(Switch = 0)
+p22 <- data %>%
+  filter(Q26 == 3, Q5Post == 2, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes")  %>%
+  mutate(Switch = 0)
 
-p23 <- data %>% filter(Q26 == 3, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" )  %>% mutate(Switch = 0)
+p23 <- data %>%
+  filter(Q26 == 3, is.na(Q5Post), Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes" )  %>%
+  mutate(Switch = 0)
 
-p24 <- data %>% filter(is.na(Q26), Q5Post == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
+p24 <- data %>% 
+  filter(is.na(Q26), Q5Post == 1, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 0)
 
-p25 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
+p25 <- data %>%
+  filter(is.na(Q26), Q5Post == 3, Q3Post == 1, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 0)
 
-p26 <- data %>% filter(is.na(Q26), Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>% mutate(Switch = 0)
+p26 <- data %>%
+  filter(is.na(Q26), Q5Post == 3, Q3Post == 3, Q3FUS_No != "No", Q3FUS_Yes != "Yes") %>%
+  mutate(Switch = 0)
 ```
 
 ```{r switchdata}
@@ -116,7 +168,9 @@ filter(! (is.na(Q19Post_SpecificProblems) & is.na(Q19Post_WorkTogether) &
 
 ```{r IQsetup}
 ## Instructor Quality 
-IQ <- select(data, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
+IQ <- select(data, Q18Post_Applications, Q18Post_Appointments,
+             Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations,
+             Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
 
 IQ$Q18Post_Discouraged <- 7-IQ$Q18Post_Discouraged
 
@@ -129,7 +183,10 @@ rescale_load_iq <- pr_IQ$loadings/sum(pr_IQ$loadings[,1])
 
 ```{r SCsetup}
 ## Student centered
-SC <- select(data, Q19Post_AskQuestions, Q19Post_Discussion, Q19Post_ExplainThinking, Q19Post_Individually, Q19Post_Lecture,Q19Post_Presentations,Q19Post_SpecificProblems, Q19Post_WorkTogether)
+SC <- select(data, Q19Post_AskQuestions, Q19Post_Discussion, 
+             Q19Post_ExplainThinking, Q19Post_Individually,
+             Q19Post_Lecture,Q19Post_Presentations,Q19Post_SpecificProblems,
+             Q19Post_WorkTogether)
 
 SC$Q19Post_Lecture <- 7 - SC$Q19Post_Lecture
 
@@ -145,28 +202,42 @@ rescale_load_sc <- pr_SC$loadings/sum(pr_SC$loadings[,1])
 
 ```{r putalltogether}
 #Make variables for Instructor quality and student centered practices
-IQcareer <- select(careerdata, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
+IQcareer <- select(careerdata, Q18Post_Applications, Q18Post_Appointments, 
+                   Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations,
+                   Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
 
 IQcareer$Q18Post_Discouraged <- 7-IQcareer$Q18Post_Discouraged
 
-SCcareer <- select(careerdata, Q19Post_AskQuestions, Q19Post_Discussion, Q19Post_ExplainThinking, Q19Post_Individually, Q19Post_Lecture,Q19Post_Presentations,Q19Post_SpecificProblems, Q19Post_WorkTogether)
+SCcareer <- select(careerdata, Q19Post_AskQuestions, Q19Post_Discussion,
+                   Q19Post_ExplainThinking, Q19Post_Individually,
+                   Q19Post_Lecture,Q19Post_Presentations,Q19Post_SpecificProblems, 
+                   Q19Post_WorkTogether)
 
 SCcareer$Q19Post_Lecture <- 7 - SCcareer$Q19Post_Lecture
 
-careerdata <- careerdata %>% mutate(Inst.Qual = apply(IQcareer,1,weighted.mean,rescale_load_iq[,1],na.rm = TRUE))
+careerdata <- careerdata %>% 
+  mutate(Inst.Qual = 
+           apply(IQcareer,1,weighted.mean,rescale_load_iq[,1],na.rm = TRUE))
 
-careerdata <- careerdata %>% mutate(Student.Cent = apply(SCcareer,1,weighted.mean,rescale_load_sc[,1],na.rm = TRUE))
+careerdata <- careerdata %>%
+  mutate(Student.Cent = 
+           apply(SCcareer,1,weighted.mean,rescale_load_sc[,1],na.rm = TRUE))
 
 ```
 
 ```{r percentiles}
 X_SAT=careerdata$Q3_SATMath
 SAT=rev(seq(200,800,by=10))
-SAT_per=c(99,99, 99, 98, 97,97,96,95,95,94,93,91,90,88,87,85,83,82,79,77,75,73,70,67,64,62,59,55,52, 49,45,42,40,36,33,30,27,24,21,19,16,14,12,10,9, 7,6,5,4,3,3,2,2,1,1,1,1,1,0,0,0)
+SAT_per=c(99,99, 99, 98, 97,97,96,95,95,94,93,
+          91,90,88,87,85,83,82,79,77,75,73,70,
+          67,64,62,59,55,52, 49,45,42,40,36,33,
+          30,27,24,21,19,16,14,12,10,9, 7,6,5,4,
+          3,3,2,2,1,1,1,1,1,0,0,0)
 
 X_ACT=careerdata$Q7_ACTMath
 ACT=36:1
-ACT_per=c(99,99,99,98,97,96,95,93,91,88,84,79,73,67,61,56,52,47,42,36,27,15,6,2)
+ACT_per=c(99,99,99,98,97,96,95,93,91,88,84,79,
+          73,67,61,56,52,47,42,36,27,15,6,2)
 ACT_per=c(ACT_per, rep(1,length(ACT)-length(ACT_per)))
 
 X_SAT=SAT_per[match(X_SAT, SAT)]
@@ -199,7 +270,11 @@ calcdata$major <- relevel(calcdata$major, ref = "1")
 ```{r final, warning = FALSE}
 
 
-mixM <- glmer(Switch ~ Prev_Calc + major + x_per + Inst.Qual + Student.Cent + Q48 + (1|Institution), data = calcdata, family = "binomial", nAGQ = 10, control = glmerControl("bobyqa", check.conv.grad = .makeCC("warning",tol = 1e-2))) 
+mixM <- glmer(Switch ~ Prev_Calc + major + x_per + Inst.Qual 
+              + Student.Cent + Q48 + (1|Institution),
+              data = calcdata, family = "binomial", nAGQ = 10, 
+              control = glmerControl("bobyqa",
+                                     check.conv.grad = .makeCC("warning",tol = 1e-2))) 
 
 sumMixM <- summary(mixM)
 
@@ -211,7 +286,9 @@ lower <- lower[-1]
 mean <- mean[-1]
 upper <- upper[-1]
 
-label <- c("College Calc", "No Previos Calc", "Pre-Med", "Engineer","Non-STEM","Undecided","Std Test", "Instructor Qual", "Student Centered", "Female")
+label <- c("College Calc", "No Previos Calc", "Pre-Med",
+           "Engineer","Non-STEM","Undecided","Std Test", 
+           "Instructor Qual", "Student Centered", "Female")
 
 
 df <- data.frame(label, mean, lower, upper)
