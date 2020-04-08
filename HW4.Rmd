@@ -2,11 +2,13 @@
 title: "Stat 472 Homework 4"
 author: "Emma, Jackson, Amamda, Megan"
 date: "4/7/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, tidy = TRUE)
 
 library(dplyr)
 library(tidyr)
@@ -231,3 +233,9 @@ print(fp)
 ```
 
 
+
+# Appendix
+
+```{r show-code, ref.label = all_labels(),  echo = TRUE, eval = FALSE}
+
+```
