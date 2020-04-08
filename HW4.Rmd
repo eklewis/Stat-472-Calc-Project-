@@ -297,7 +297,7 @@ df <- data.frame(label, mean, lower, upper)
 df$label <- factor(df$label, levels=rev(df$label))
 
 
-fp <- ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper)) +
+fp <- ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper, color = mean)) +
         geom_pointrange() + 
         geom_hline(yintercept=1, lty=2) +  # add a dotted line at x=1 after flip
         coord_flip() +  # flip coordinates (puts labels on y axis)
