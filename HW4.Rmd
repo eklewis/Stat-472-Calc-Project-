@@ -194,7 +194,7 @@ calcdata$major <- relevel(calcdata$major, ref = "1")
 
 ```
 
-```{r final}
+```{r final, warning = FALSE}
 
 
 mixM <- glmer(Switch ~ Prev_Calc + major + x_per + Inst.Qual + Student.Cent + Q48 + (1|Institution), data = calcdata, family = "binomial", nAGQ = 10, control = glmerControl("bobyqa", check.conv.grad = .makeCC("warning",tol = 1e-2))) 
