@@ -151,11 +151,19 @@ datF <- swDat %>%
 ```
 
 ```{r}
-IQ <- select(datF, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
+IQ <- select(FullData, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
 
+IQ <- na.omit(IQ)
 
+pr_IQ <- princomp(IQ)
 
-datF <- datF %>% mutate(Inst.Qual = apply(IQ,1,weighted.mean,rescale_load_iq[,1],na.rm = TRUE))
+rescale_load_iq <- pr_IQ$loadings/sum(pr_IQ$loadings[,1])
+
+IQdatF <- select(datF, Q18Post_Applications, Q18Post_Appointments, 
+                   Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations,
+                   Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
+
+datF <- datF %>% mutate(Inst.Qual = apply(IQdatF,1,weighted.mean,rescale_load_iq[,1],na.rm = TRUE))
 
 
 ```
