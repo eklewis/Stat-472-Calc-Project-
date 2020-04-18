@@ -67,10 +67,19 @@ dat$Q18Post_Time <- factor(dat$Q18Post_Time, exclude = "7")
 
 #######Flip The Rank of Discouraged#######
 
+dat$Q18Post_AskedQs <- as.numeric(dat$Q18Post_AskedQs)
+dat$Q18Post_Listened <- as.numeric(dat$Q18Post_Listened)
+dat$Q18Post_Applications <- as.numeric(dat$Q18Post_Applications)
+dat$Q18Post_Time <- as.numeric(dat$Q18Post_Time)
+dat$Q18Post_ProblemSolver <- as.numeric(dat$Q18Post_ProblemSolver)
+dat$Q18Post_Explanations <- as.numeric(dat$Q18Post_Explanations)
+dat$Q18Post_Appointments <- as.numeric(dat$Q18Post_Appointments)
 dat$Q18Post_Discouraged <- as.numeric(dat$Q18Post_Discouraged)
+
 dat$Q18Post_Discouraged <- 7-dat$Q18Post_Discouraged
 
 ```
+
 
 ```{r}
 
@@ -139,6 +148,16 @@ datF <- swDat %>%
 
   # filter(! is.na(Calc_Grade)) #%>% #filter students grade
   # filter(! (is.na(Stud_Work) & is.na(Stud_Extra))) %>% #filter if no work or extra listed
+```
+
+```{r}
+IQ <- select(datF, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
+
+
+
+datF <- datF %>% mutate(Inst.Qual = apply(IQ,1,weighted.mean,rescale_load_iq[,1],na.rm = TRUE))
+
+
 ```
 
 
