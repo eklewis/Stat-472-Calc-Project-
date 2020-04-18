@@ -9,6 +9,8 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 library(plyr)
 library(dplyr)
+library(mlmRev)
+library(lme4)
 ```
 
 ```{r}
@@ -167,5 +169,27 @@ datF <- datF %>% mutate(Inst.Qual = apply(IQdatF,1,weighted.mean,rescale_load_iq
 
 
 ```
+
+
+# Mixed Model
+
+\begin{eqnarray}
+\text{log} (\frac{p_i}{1-p_i}) &=& \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \beta_3 X_{i3} + \beta_4 X_{i4} + \alpha_{\text{institution}} \\
+p_i &=& \text{Probability of a student switching} \\
+X_1 &=& \text{Gender of Student} \\
+X_2 &=& \text{Gender of Professor} \\
+X_2 &=& \text{Age of Professor} \\
+X_4 &=& \text{Instrcutor Quality} \\
+\alpha_{\text{institution}} &\sim& N (0, \tau^2)
+\end{eqnarray}
+
+
+```{r}
+### Fit the model that we will be estimating
+model <- glmer(Switch ~ Q48 + Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = "binomial")
+
+model
+```
+
 
 

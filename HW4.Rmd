@@ -269,7 +269,7 @@ calcdata$major <- relevel(calcdata$major, ref = "1")
 
 ```
 
-```{r final, warning = FALSE, fig.width=5}
+```{r final, warning = FALSE, fig.width=7}
 
 
 mixM <- glmer(Switch ~ Prev_Calc + major + x_per + Inst.Qual 
