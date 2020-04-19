@@ -192,4 +192,79 @@ model
 ```
 
 
+```{r}
+#Create X and Y (y will bet log of(p\1-p))
+y <- log(datF$Switch/ (1-datF$Switch)) ## not positive if this works
+X <- cbind(1, datF$Q48, datF$Instr_Gender, datF$Instr_Age + datF$Inst.Qual)
+
+#Create Z and W
+Z <- model.matrix(~as.factor(Institution_ID)-1, data=datF)
+W <- cbind(X, Z)
+q <- ncol(Z)
+p <- ncol(W)-q 
+n <- nrow(W)
+S <- 1000
+
+#place to store posterior
+beta_keep <- matrix(NA, S, p)
+gamma_keep <- matrix(NA, S, q)
+sig2inv_keep <- rep(NA,S)
+kappa2inv_keep <- rep(NA,S)
+  
+#pre-calculations
+WW <- t(W)%*%W
+Wy <- t(W)%*%y
+
+## starting values
+a1 <- 0.1
+a2 <- 0.1
+b1 <- 0.1
+b2 <- 0.1
+tau2 <- 10^2
+burnin <- 100
+S <- 1000 
+beta <- rnorm(p) # fixed effect and intercept
+gamma <- rnorm(q) # random effects only
+theta <- c(beta, gamma)
+sig2inv <- .1
+kappa2inv <- .1
+SigmaDiag <- c(0, rep(1/tau2, p-1), rep(kappa2inv,q))
+
+
+## MCMC
+  
+for(s in 1:S){
+  ### update beta from full conditional
+    
+  #variance
+  v <- WW*sig2inv 
+  SigmaDiag[(p+1):(p+q)] <- kappa2inv
+  diag(v) <- diag(v) + SigmaDiag
+  v <- chol2inv(chol(v))
+    
+  #mean
+  m <- v %*% (sig2inv*Wy)
+    
+  # simulate from FC
+  theta <- drop(m +  t(chol(v)) %*% rnorm(p+q))
+    
+  ### update sig2inv from full conditional
+  sig2inv <- rgamma(1, a1 + n/2,  a2 + 0.5*sum((y-W%*%theta)^2))
+    
+  ### update kappa2inv from full conditional
+  ### The following line was correctd after the video
+  kappa2inv <- rgamma(1, b1 + q/2,  b2 + 0.5*sum(theta[(p+1):(p+q)]^2))
+    
+    
+  ### store output
+  sig2inv_keep[s] <- sig2inv
+  kappa2inv_keep[s] <- kappa2inv
+  beta_keep[s,] <- theta[1:p]
+  gamma_keep[s,] <- theta[(p+1):(p+q)]
+    
+}
+
+```
+
+
 
