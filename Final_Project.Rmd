@@ -11,6 +11,7 @@ library(plyr)
 library(dplyr)
 library(mlmRev)
 library(lme4)
+library(broom)
 ```
 
 ```{r}
@@ -139,7 +140,7 @@ swDat <- rbind(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,
 
 datF <- swDat %>%  
   
-   filter(Q48 == 2) %>% #filter female only
+   filter(! is.na(Q48)) %>% #filter female only
   
    filter(! (is.na(Q18Post_Applications) & is.na(Q18Post_Appointments) & is.na(Q18Post_AskedQs)
             & is.na(Q18Post_Discouraged) & is.na(Q18Post_Explanations) &
@@ -174,21 +175,40 @@ datF <- datF %>% mutate(Inst.Qual = apply(IQdatF,1,weighted.mean,rescale_load_iq
 # Mixed Model
 
 \begin{eqnarray}
-\text{log} (\frac{p_i}{1-p_i}) &=& \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \beta_3 X_{i3} + \beta_4 X_{i4} + \alpha_{\text{institution}} \\
+\text{log} (\frac{p_i}{1-p_i}) &=& \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \beta_3 X_{i3}  + \alpha_{\text{institution}} \\
 p_i &=& \text{Probability of a student switching} \\
-X_1 &=& \text{Gender of Student} \\
-X_2 &=& \text{Gender of Professor} \\
+X_1 &=& \text{Gender of Professor} \\
 X_2 &=& \text{Age of Professor} \\
-X_4 &=& \text{Instrcutor Quality} \\
+X_3 &=& \text{Instrcutor Quality} \\
 \alpha_{\text{institution}} &\sim& N (0, \tau^2)
 \end{eqnarray}
 
 
+\begin{eqnarray}
+
+\end{eqnarray}
+
+
+
+
 ```{r}
 ### Fit the model that we will be estimating
-model <- glmer(Switch ~ Q48 + Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = "binomial")
+model <- glmer(Switch ~  Q48 + Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = "binomial")
 
 model
+
+tidy(model)
+```
+```{r}
+#Graphs
+ggplot(aes(x = Inst.Qual, y = Switch), data = datF) + geom_point() + xlab("Instructor Quality") + ylab("Switcher") + geom_smooth(method = "glm", se = FALSE, method.args = list(family = binomial))
+
+ggplot(aes(x = Instr.Age, y = Switch), data = datF) + geom_point() + xlab("Instructor Age") + ylab("Switcher") + geom_smooth(method = "glm", se = FALSE, method.args = list(family = binomial))
+
+
+ggplot(aes(x = Inst.Qual, color = Switch), data = datF) + geom_histogram()
+
+length(which(datF$Inst.Qual < 2))
 ```
 
 
@@ -233,36 +253,36 @@ SigmaDiag <- c(0, rep(1/tau2, p-1), rep(kappa2inv,q))
 
 ## MCMC
   
-for(s in 1:S){
+#for(s in 1:S){
   ### update beta from full conditional
     
   #variance
-  v <- WW*sig2inv 
-  SigmaDiag[(p+1):(p+q)] <- kappa2inv
-  diag(v) <- diag(v) + SigmaDiag
-  v <- chol2inv(chol(v))
+ # v <- WW*sig2inv 
+  #SigmaDiag[(p+1):(p+q)] <- kappa2inv
+  #diag(v) <- diag(v) + SigmaDiag
+  #v <- chol2inv(chol(v))
     
   #mean
-  m <- v %*% (sig2inv*Wy)
+  #m <- v %*% (sig2inv*Wy)
     
   # simulate from FC
-  theta <- drop(m +  t(chol(v)) %*% rnorm(p+q))
+  #theta <- drop(m +  t(chol(v)) %*% rnorm(p+q))
     
   ### update sig2inv from full conditional
-  sig2inv <- rgamma(1, a1 + n/2,  a2 + 0.5*sum((y-W%*%theta)^2))
+ # sig2inv <- rgamma(1, a1 + n/2,  a2 + 0.5*sum((y-W%*%theta)^2))
     
   ### update kappa2inv from full conditional
   ### The following line was correctd after the video
-  kappa2inv <- rgamma(1, b1 + q/2,  b2 + 0.5*sum(theta[(p+1):(p+q)]^2))
+ # kappa2inv <- rgamma(1, b1 + q/2,  b2 + 0.5*sum(theta[(p+1):(p+q)]^2))
     
     
   ### store output
-  sig2inv_keep[s] <- sig2inv
-  kappa2inv_keep[s] <- kappa2inv
-  beta_keep[s,] <- theta[1:p]
-  gamma_keep[s,] <- theta[(p+1):(p+q)]
+  #sig2inv_keep[s] <- sig2inv
+  #kappa2inv_keep[s] <- kappa2inv
+  #beta_keep[s,] <- theta[1:p]
+  #gamma_keep[s,] <- theta[(p+1):(p+q)]
     
-}
+#}
 
 ```
 
