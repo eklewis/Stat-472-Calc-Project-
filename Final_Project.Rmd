@@ -17,59 +17,58 @@ library(broom)
 ```{r}
 
 ###Read Files In#####
-FullData <- read.csv("ProjectData.csv")   
+FullData <- read.csv("maalongdatafile_ANON.csv")  
+
+smallData2 <- FullData %>% select(spr26calc2,sq5initialc2,studid, sqr26calc2, sp48gender, ip27gender, State, sq48gradel, ip28age,sq42preparecalcl, sq39jobl, sq40extral, ip14wd, ip14df, ip14c, sq18ask, sq18listen, sq18discuss, sq18time, sq18solve, sq18explain, sq18avail,sq18discourage)
+
+
 postData <- read.csv("CSPCC_Data_FUSonly.csv")
 
 ####Label Student ID the same in both#####
-colnames(FullData)[3] <- "StudentID"
-
-colnames(FullData)[6] <- "Instr_Gender"
+colnames(smallData2) <- c("Q26", "Q5Post", "StudentID", "Q3Post", "Q48", "Instr_Gender", "Institution_ID", "Calc_Grade", "Instr_Age", "Instr_Prep_Calc", "Stud_Work", "Stud_Extra", "Instr_Withdraw", "Instr_Fail", "Instr_Pass", "Q18Post_AskedQs", "Q18Post_Listened", "Q18Post_Applications", "Q18Post_Time", "Q18Post_ProblemSolver", "Q18Post_Explanations", "Q18Post_Appointments", "Q18Post_Discouraged")
 
 ###Merge The Two DFs########
-dat <- merge(FullData, postData, by = 'StudentID')
+dat <- merge(smallData2, postData, by = 'StudentID')
+
 ```
 
-```{r}
-#####Convert 4s to NAs######
-dat$Q26 <- as.factor(dat$Q26)
-dat$Q26 <- factor(dat$Q26, exclude = "4")
-
-dat$Q5Post <- as.factor(dat$Q5Post)
-dat$Q5Post <- factor(dat$Q5Post, exclude = "4")
-
-dat$Q3Post <- as.factor(dat$Q3Post)
-dat$Q3Post <- factor(dat$Q3Post, exclude = "4")
-```
 
 ```{r}
 
-#####Convert 7s to NAs#######
-dat$Q18Post_Applications <- as.factor(dat$Q18Post_Applications)
-dat$Q18Post_Applications <- factor(dat$Q18Post_Applications, exclude = "7")
+dat$Q18Post_Applications <- revalue(dat$Q18Post_Applications, c("Strongly disagree" = 1, "Slightly disagree" = 3, "Disagree" = 2, "Slightly agree" = 4, "Agree" = 5, "Strongly agree" = 6))
+dat$Q18Post_Applications[dat$Q18Post_Applications==""]  <- NA
+dat$Q18Post_Applications <- factor(dat$Q18Post_Applications, levels(dat$Q18Post_Applications)[c(7,3,5,4,2,6,1)])
 
-dat$Q18Post_Appointments <- as.factor(dat$Q18Post_Appointments)
-dat$Q18Post_Appointments <- factor(dat$Q18Post_Appointments, exclude = "7")
 
-dat$Q18Post_AskedQs <- as.factor(dat$Q18Post_AskedQs)
-dat$Q18Post_AskedQs <- factor(dat$Q18Post_AskedQs, exclude = "7")
+dat$Q18Post_AskedQs <- revalue(dat$Q18Post_AskedQs, c("Strongly disagree" = 1, "Slightly disagree" = 3, "Disagree" = 2, "Slightly agree" = 4, "Agree" = 5, "Strongly agree" = 6))
+dat$Q18Post_AskedQs[dat$Q18Post_AskedQs==""]  <- NA
+dat$Q18Post_AskedQs <- factor(dat$Q18Post_AskedQs, levels(dat$Q18Post_AskedQs)[c(7,3,5,4,2,6,1)])
 
-dat$Q18Post_Discouraged <- as.factor(dat$Q18Post_Discouraged)
-dat$Q18Post_Discouraged <- factor(dat$Q18Post_Discouraged, exclude = "7")
+dat$Q18Post_Listened <- revalue(dat$Q18Post_Listened, c("Strongly disagree" = 1, "Slightly disagree" = 3, "Disagree" = 2, "Slightly agree" = 4, "Agree" = 5, "Strongly agree" = 6))
+dat$Q18Post_Listened[dat$Q18Post_Listened==""]  <- NA
+dat$Q18Post_Listened <- factor(dat$Q18Post_Listened, levels(dat$Q18Post_Listened)[c(7,3,5,4,2,6,1)])
 
-dat$Q18Post_Explanations <- as.factor(dat$Q18Post_Explanations)
-dat$Q18Post_Explanations <- factor(dat$Q18Post_Explanations, exclude = "7")
+dat$Q18Post_Time <- revalue(dat$Q18Post_Time, c("Strongly disagree" = 1, "Slightly disagree" = 3, "Disagree" = 2, "Slightly agree" = 4, "Agree" = 5, "Strongly agree" = 6))
+dat$Q18Post_Time[dat$Q18Post_Time==""]  <- NA
+dat$Q18Post_Time <- factor(dat$Q18Post_Time, levels(dat$Q18Post_Time)[c(7,3,5,4,2,6,1)])
 
-dat$Q18Post_Listened <- as.factor(dat$Q18Post_Listened)
-dat$Q18Post_Listened <- factor(dat$Q18Post_Listened, exclude = "7")
+dat$Q18Post_ProblemSolver <- revalue(dat$Q18Post_ProblemSolver, c("Strongly disagree" = 1, "Slightly disagree" = 3, "Disagree" = 2, "Slightly agree" = 4, "Agree" = 5, "Strongly agree" = 6))
+dat$Q18Post_ProblemSolver[dat$Q18Post_ProblemSolver==""]  <- NA
+dat$Q18Post_ProblemSolver <- factor(dat$Q18Post_ProblemSolver, levels(dat$Q18Post_ProblemSolver)[c(7,3,5,4,2,6,1)])
 
-dat$Q18Post_ProblemSolver <- as.factor(dat$Q18Post_ProblemSolver)
-dat$Q18Post_ProblemSolver <- factor(dat$Q18Post_ProblemSolver, exclude = "7")
+dat$Q18Post_Explanations <- revalue(dat$Q18Post_Explanations, c("Strongly disagree" = 1, "Slightly disagree" = 3, "Disagree" = 2, "Slightly agree" = 4, "Agree" = 5, "Strongly agree" = 6))
+dat$Q18Post_Explanations[dat$Q18Post_Explanations==""]  <- NA
+dat$Q18Post_Explanations <- factor(dat$Q18Post_Explanations, levels(dat$Q18Post_Explanations)[c(7,3,5,4,2,6,1)])
 
-dat$Q18Post_Time <- as.factor(dat$Q18Post_Time)
-dat$Q18Post_Time <- factor(dat$Q18Post_Time, exclude = "7")
+dat$Q18Post_Appointments <- revalue(dat$Q18Post_Appointments, c("Strongly disagree" = 1, "Slightly disagree" = 3, "Disagree" = 2, "Slightly agree" = 4, "Agree" = 5, "Strongly agree" = 6))
+dat$Q18Post_Appointments[dat$Q18Post_Appointments==""]  <- NA
+dat$Q18Post_Appointments <- factor(dat$Q18Post_Appointments, levels(dat$Q18Post_Appointments)[c(7,3,5,4,2,6,1)])
 
-#######Flip The Rank of Discouraged#######
+dat$Q18Post_Discouraged <- revalue(dat$Q18Post_Discouraged, c("Strongly disagree" = 1, "Slightly disagree" = 3, "Disagree" = 2, "Slightly agree" = 4, "Agree" = 5, "Strongly agree" = 6))
+dat$Q18Post_Discouraged[dat$Q18Post_Discouraged==""]  <- NA
+dat$Q18Post_Discouraged <- factor(dat$Q18Post_Discouraged, levels(dat$Q18Post_Discouraged)[c(7,3,5,4,2,6,1)])
 
+dat$Q18Post_Discouraged <- as.numeric(dat$Q18Post_Discouraged)
 dat$Q18Post_AskedQs <- as.numeric(dat$Q18Post_AskedQs)
 dat$Q18Post_Listened <- as.numeric(dat$Q18Post_Listened)
 dat$Q18Post_Applications <- as.numeric(dat$Q18Post_Applications)
@@ -77,11 +76,28 @@ dat$Q18Post_Time <- as.numeric(dat$Q18Post_Time)
 dat$Q18Post_ProblemSolver <- as.numeric(dat$Q18Post_ProblemSolver)
 dat$Q18Post_Explanations <- as.numeric(dat$Q18Post_Explanations)
 dat$Q18Post_Appointments <- as.numeric(dat$Q18Post_Appointments)
-dat$Q18Post_Discouraged <- as.numeric(dat$Q18Post_Discouraged)
 
-dat$Q18Post_Discouraged <- 7-dat$Q18Post_Discouraged
+
+
+dat$Q18Post_Discouraged <- 7 -dat$Q18Post_Discouraged
+
+
 
 ```
+
+```{r}
+dat$Q26 <- revalue(dat$Q26, c("Yes" = 1, "No" = 2, "Dont know/ Not sure/ N/A" = 3))
+
+dat$Q3Post <- revalue(dat$Q3Post, c("Yes" = 1, "No" = 2, "Dont know/ Not sure/ N/A" = 3))
+
+dat$Q5Post <- revalue(dat$Q5Post, c("Yes" = 1, "No" = 2, "Dont know/ Not sure/ N/A" = 3))
+
+dat$Q26[dat$Q26==""]  <- NA
+dat$Q3Post[dat$Q3Post==""]  <- NA
+dat$Q5Post[dat$Q5Post==""]  <- NA
+
+```
+
 
 
 ```{r}
@@ -140,7 +156,7 @@ swDat <- rbind(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,
 
 datF <- swDat %>%  
   
-   filter(! is.na(Q48)) %>% #filter female only
+   filter( Q48 == "Female") %>% #filter female only
   
    filter(! (is.na(Q18Post_Applications) & is.na(Q18Post_Appointments) & is.na(Q18Post_AskedQs)
             & is.na(Q18Post_Discouraged) & is.na(Q18Post_Explanations) &
@@ -154,7 +170,7 @@ datF <- swDat %>%
 ```
 
 ```{r}
-IQ <- select(FullData, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
+IQ <- select(dat, Q18Post_Applications, Q18Post_Appointments, Q18Post_AskedQs, Q18Post_Discouraged, Q18Post_Explanations, Q18Post_Listened, Q18Post_ProblemSolver, Q18Post_Time)
 
 IQ <- na.omit(IQ)
 
@@ -193,15 +209,16 @@ X_3 &=& \text{Instrcutor Quality} \\
 
 ```{r}
 ### Fit the model that we will be estimating
-model <- glmer(Switch ~  Q48 + Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = "binomial")
+model <- glmer(Switch ~  Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = "binomial")
 
 model
 
-tidy(model)
+summary(model)
 ```
 ```{r}
 #Graphs
-ggplot(aes(x = Inst.Qual, y = Switch), data = datF) + geom_point() + xlab("Instructor Quality") + ylab("Switcher") + geom_smooth(method = "glm", se = FALSE, method.args = list(family = binomial))
+
+ggplot(aes(x = Instr_Gender, y = Switch), data = datF) + geom_point() + xlab("Instructor Quality") + ylab("Switcher")
 
 ggplot(aes(x = Instr.Age, y = Switch), data = datF) + geom_point() + xlab("Instructor Age") + ylab("Switcher") + geom_smooth(method = "glm", se = FALSE, method.args = list(family = binomial))
 
@@ -209,6 +226,9 @@ ggplot(aes(x = Instr.Age, y = Switch), data = datF) + geom_point() + xlab("Instr
 ggplot(aes(x = Inst.Qual, color = Switch), data = datF) + geom_histogram()
 
 length(which(datF$Inst.Qual < 2))
+
+
+
 ```
 
 
@@ -286,5 +306,16 @@ SigmaDiag <- c(0, rep(1/tau2, p-1), rep(kappa2inv,q))
 
 ```
 
+```{r}
+fit_pool <- stan_glmer(Switch ~ Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = binomial("logit"))
+
+invlogit <- plogis  # function(x) 1/(1 + exp(-x))
+summary_stats <- function(posterior) {
+  x <- invlogit(posterior)  # log-odds -> probabilities
+  t(apply(x, 2, quantile, probs = c(0.05, 0.95))) 
+}
+
+pool <- summary_stats(as.matrix(fit_pool))
+```
 
 
