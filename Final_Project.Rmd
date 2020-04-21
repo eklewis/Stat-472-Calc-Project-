@@ -163,10 +163,9 @@ datF <- swDat %>%
               is.na(Q18Post_Listened) & is.na(Q18Post_ProblemSolver) &
               is.na(Q18Post_Time))) %>% #filer instruc qual
    filter(! is.na(Instr_Age)) %>% #filter instructor age
-   filter(! is.na(Instr_Gender)) # filter instructor gender
-
-  # filter(! is.na(Calc_Grade)) #%>% #filter students grade
-  # filter(! (is.na(Stud_Work) & is.na(Stud_Extra))) %>% #filter if no work or extra listed
+   filter(! is.na(Instr_Gender)) %>% # filter instructor gender
+   filter(! is.na(Calc_Grade)) %>% #filter students grade
+   filter(! (is.na(Stud_Work) & is.na(Stud_Extra))) #%>% #filter if no work or extra listed
 ```
 
 ```{r}
@@ -209,7 +208,7 @@ X_3 &=& \text{Instrcutor Quality} \\
 
 ```{r}
 ### Fit the model that we will be estimating
-model <- glmer(Switch ~  Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = "binomial")
+model <- glmer(Switch ~  Instr_Gender + Instr_Age + Inst.Qual + Calc_Grade + (1|Institution_ID), data = datF, family = "binomial")
 
 model
 
@@ -223,7 +222,7 @@ ggplot(aes(x = Instr_Gender, y = Switch), data = datF) + geom_point() + xlab("In
 ggplot(aes(x = Instr.Age, y = Switch), data = datF) + geom_point() + xlab("Instructor Age") + ylab("Switcher") + geom_smooth(method = "glm", se = FALSE, method.args = list(family = binomial))
 
 
-ggplot(aes(x = Inst.Qual, color = Switch), data = datF) + geom_histogram()
+ggplot(aes(x = Inst.Qual, fill = Switch), data = datF) + geom_histogram()
 
 length(which(datF$Inst.Qual < 2))
 
