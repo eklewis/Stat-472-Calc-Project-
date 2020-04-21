@@ -2,7 +2,10 @@
 title: "Final Project"
 author: "Tigers"
 date: "4/17/2020"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -12,6 +15,8 @@ library(dplyr)
 library(mlmRev)
 library(lme4)
 library(broom)
+library(ggplot2)
+library(kableExtra)
 ```
 
 ```{r}
@@ -199,10 +204,6 @@ X_3 &=& \text{Instrcutor Quality} \\
 \end{eqnarray}
 
 
-\begin{eqnarray}
-
-\end{eqnarray}
-
 
 
 
@@ -219,15 +220,27 @@ summary(model)
 
 ggplot(aes(x = Instr_Gender, y = Switch), data = datF) + geom_point() + xlab("Instructor Quality") + ylab("Switcher")
 
-ggplot(aes(x = Instr.Age, y = Switch), data = datF) + geom_point() + xlab("Instructor Age") + ylab("Switcher") + geom_smooth(method = "glm", se = FALSE, method.args = list(family = binomial))
+ggplot(aes(x = Instr_Age, y = Switch), data = datF) + geom_point() + xlab("Instructor Age") + ylab("Switcher") + geom_smooth(method = "glm", se = FALSE, method.args = list(family = binomial))
 
 
+<<<<<<< HEAD
 ggplot(aes(x = Inst.Qual, fill = Switch), data = datF) + geom_histogram()
+=======
+>>>>>>> 943736dd5dc52790c6f22205abdaa69649426190
 
-length(which(datF$Inst.Qual < 2))
+
+t1 <- data.frame("." = c("Female Prof", "Male Prof"), "Switcher" = c(sum(datF$Instr_Gender == 0 & datF$Switch == 1),sum(datF$Instr_Gender == 1 & datF$Switch == 1)
+), "Persister" = c(sum(datF$Instr_Gender == 0 & datF$Switch == 0) ,sum(datF$Instr_Gender == 1 & datF$Switch == 0)
+))
 
 
+knitr::kable(t1) %>%
+  kable_styling("striped", full_width = F) 
 
+datF$Switch <- as.factor(datF$Switch)
+
+ggplot(aes(x = Inst.Qual, color = Switch), data = datF) +
+  geom_histogram(fill = "light blue",  alpha = 0.5, aes(color = as.factor(Switch))) + xlab("Instructor Quality") 
 ```
 
 
@@ -306,15 +319,15 @@ SigmaDiag <- c(0, rep(1/tau2, p-1), rep(kappa2inv,q))
 ```
 
 ```{r}
-fit_pool <- stan_glmer(Switch ~ Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = binomial("logit"))
+#fit_pool <- stan_glmer(Switch ~ Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = binomial("logit"))
 
-invlogit <- plogis  # function(x) 1/(1 + exp(-x))
-summary_stats <- function(posterior) {
-  x <- invlogit(posterior)  # log-odds -> probabilities
-  t(apply(x, 2, quantile, probs = c(0.05, 0.95))) 
-}
+#invlogit <- plogis  # function(x) 1/(1 + exp(-x))
+#summary_stats <- function(posterior) {
+#  x <- invlogit(posterior)  # log-odds -> probabilities
+#  t(apply(x, 2, quantile, probs = c(0.05, 0.95))) 
+#}
 
-pool <- summary_stats(as.matrix(fit_pool))
+#pool <- summary_stats(as.matrix(fit_pool))
 ```
 
 
