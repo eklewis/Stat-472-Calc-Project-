@@ -17,6 +17,8 @@ library(lme4)
 library(broom)
 library(ggplot2)
 library(kableExtra)
+library(bayesplot)
+library(rstanarm)
 ```
 
 ```{r}
@@ -97,9 +99,16 @@ dat$Q3Post <- revalue(dat$Q3Post, c("Yes" = 1, "No" = 2, "Dont know/ Not sure/ N
 
 dat$Q5Post <- revalue(dat$Q5Post, c("Yes" = 1, "No" = 2, "Dont know/ Not sure/ N/A" = 3))
 
+#dat$Q48 <- revalue(dat$Q48, c("Female" = 0, "Male" = 1))
+
+dat$Q48 <- factor(dat$Q48, levels(dat$Q48[c(3,2,1)]))
+
 dat$Q26[dat$Q26==""]  <- NA
 dat$Q3Post[dat$Q3Post==""]  <- NA
 dat$Q5Post[dat$Q5Post==""]  <- NA
+dat$Q48[dat$Q48==""]  <- NA
+
+
 
 ```
 
@@ -161,7 +170,7 @@ swDat <- rbind(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,
 
 datF <- swDat %>%  
   
-   filter( Q48 == "Female") %>% #filter female only
+   filter( !is.na(Q48)) %>% #filter female only
   
    filter(! (is.na(Q18Post_Applications) & is.na(Q18Post_Appointments) & is.na(Q18Post_AskedQs)
             & is.na(Q18Post_Discouraged) & is.na(Q18Post_Explanations) &
@@ -170,7 +179,7 @@ datF <- swDat %>%
    filter(! is.na(Instr_Age)) %>% #filter instructor age
    filter(! is.na(Instr_Gender)) %>% # filter instructor gender
    filter(! is.na(Calc_Grade)) %>% #filter students grade
-   filter(! (is.na(Stud_Work) & is.na(Stud_Extra))) #%>% #filter if no work or extra listed
+   filter(! (is.na(Stud_Work) | is.na(Stud_Extra))) #%>% #filter if no work or extra listed
 ```
 
 ```{r}
@@ -208,13 +217,22 @@ X_3 &=& \text{Instrcutor Quality} \\
 
 
 ```{r}
-### Fit the model that we will be estimating
-model <- glmer(Switch ~  Instr_Gender + Instr_Age + Inst.Qual + Calc_Grade + (1|Institution_ID), data = datF, family = "binomial")
-
-model
-
-summary(model)
+# ### Fit the model that we will be estimating
+# model <- glmer(Switch ~  Instr_Gender + Instr_Age + Inst.Qual + Calc_Grade + (1|Institution_ID), data = datF, family = "binomial")
+# 
+# model
+# 
+# summary(model)
 ```
+
+
+```{r}
+
+datF <- datF %>% mutate(ExtraTime = datF$Stud_Work + datF$Stud_Extra)
+
+
+```
+
 ```{r}
 #Graphs
 
@@ -222,12 +240,7 @@ ggplot(aes(x = Instr_Gender, y = Switch), data = datF) + geom_point() + xlab("In
 
 ggplot(aes(x = Instr_Age, y = Switch), data = datF) + geom_point() + xlab("Instructor Age") + ylab("Switcher") + geom_smooth(method = "glm", se = FALSE, method.args = list(family = binomial))
 
-
-<<<<<<< HEAD
 ggplot(aes(x = Inst.Qual, fill = Switch), data = datF) + geom_histogram()
-=======
->>>>>>> 943736dd5dc52790c6f22205abdaa69649426190
-
 
 t1 <- data.frame("." = c("Female Prof", "Male Prof"), "Switcher" = c(sum(datF$Instr_Gender == 0 & datF$Switch == 1),sum(datF$Instr_Gender == 1 & datF$Switch == 1)
 ), "Persister" = c(sum(datF$Instr_Gender == 0 & datF$Switch == 0) ,sum(datF$Instr_Gender == 1 & datF$Switch == 0)
@@ -244,90 +257,26 @@ ggplot(aes(x = Inst.Qual, color = Switch), data = datF) +
 ```
 
 
-```{r}
-#Create X and Y (y will bet log of(p\1-p))
-y <- log(datF$Switch/ (1-datF$Switch)) ## not positive if this works
-X <- cbind(1, datF$Q48, datF$Instr_Gender, datF$Instr_Age + datF$Inst.Qual)
-
-#Create Z and W
-Z <- model.matrix(~as.factor(Institution_ID)-1, data=datF)
-W <- cbind(X, Z)
-q <- ncol(Z)
-p <- ncol(W)-q 
-n <- nrow(W)
-S <- 1000
-
-#place to store posterior
-beta_keep <- matrix(NA, S, p)
-gamma_keep <- matrix(NA, S, q)
-sig2inv_keep <- rep(NA,S)
-kappa2inv_keep <- rep(NA,S)
-  
-#pre-calculations
-WW <- t(W)%*%W
-Wy <- t(W)%*%y
-
-## starting values
-a1 <- 0.1
-a2 <- 0.1
-b1 <- 0.1
-b2 <- 0.1
-tau2 <- 10^2
-burnin <- 100
-S <- 1000 
-beta <- rnorm(p) # fixed effect and intercept
-gamma <- rnorm(q) # random effects only
-theta <- c(beta, gamma)
-sig2inv <- .1
-kappa2inv <- .1
-SigmaDiag <- c(0, rep(1/tau2, p-1), rep(kappa2inv,q))
-
-
-## MCMC
-  
-#for(s in 1:S){
-  ### update beta from full conditional
-    
-  #variance
- # v <- WW*sig2inv 
-  #SigmaDiag[(p+1):(p+q)] <- kappa2inv
-  #diag(v) <- diag(v) + SigmaDiag
-  #v <- chol2inv(chol(v))
-    
-  #mean
-  #m <- v %*% (sig2inv*Wy)
-    
-  # simulate from FC
-  #theta <- drop(m +  t(chol(v)) %*% rnorm(p+q))
-    
-  ### update sig2inv from full conditional
- # sig2inv <- rgamma(1, a1 + n/2,  a2 + 0.5*sum((y-W%*%theta)^2))
-    
-  ### update kappa2inv from full conditional
-  ### The following line was correctd after the video
- # kappa2inv <- rgamma(1, b1 + q/2,  b2 + 0.5*sum(theta[(p+1):(p+q)]^2))
-    
-    
-  ### store output
-  #sig2inv_keep[s] <- sig2inv
-  #kappa2inv_keep[s] <- kappa2inv
-  #beta_keep[s,] <- theta[1:p]
-  #gamma_keep[s,] <- theta[(p+1):(p+q)]
-    
-#}
-
-```
 
 ```{r}
-#fit_pool <- stan_glmer(Switch ~ Instr_Gender + Instr_Age + Inst.Qual + (1|Institution_ID), data = datF, family = binomial("logit"))
 
-#invlogit <- plogis  # function(x) 1/(1 + exp(-x))
-#summary_stats <- function(posterior) {
-#  x <- invlogit(posterior)  # log-odds -> probabilities
-#  t(apply(x, 2, quantile, probs = c(0.05, 0.95))) 
-#}
+datF$Instr_Gender <- as.factor(datF$Instr_Gender)
 
-#pool <- summary_stats(as.matrix(fit_pool))
+wi_prior <- normal(0.05, 4)
+
+fit_pool <- stan_glmer(Switch ~  Q48*Instr_Gender + Inst.Qual + Instr_Age  + Calc_Grade + ExtraTime + (1|Institution_ID), data = datF, family = binomial("logit"))
+
+ invlogit <- plogis  # function(x) 1/(1 + exp(-x))
+summary_stats <- function(posterior) {
+  x <- invlogit(posterior)  # log-odds -> probabilities
+  t(apply(x, 2, quantile, probs = c(0.1, 0.5, 0.9))) 
+}
+
+t(apply(as.matrix(fit_pool), 2, quantile, probs = c(0.1, 0.5, 0.9)))
+pool <- summary_stats(as.matrix(fit_pool))
+pool
+launch_shinystan(fit_pool, ppd = FALSE)
+
 ```
 
 
