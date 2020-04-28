@@ -280,3 +280,13 @@ launch_shinystan(fit_pool, ppd = FALSE)
 ```
 
 
+```{r}
+#Table of betas with 
+betas_table <- as.data.frame(pool[1:8,])
+
+knitr::kable(betas_table) %>%
+  kable_styling("striped", full_width = F)
+
+
+```
+
