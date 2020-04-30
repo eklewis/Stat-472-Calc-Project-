@@ -282,3 +282,20 @@ exp(betas)
 ```
 
 
+```{r}
+#Table of betas with 
+betas_table <- as.data.frame(pool[1:8,])
+
+knitr::kable(betas_table) %>%
+  kable_styling("striped", full_width = F)
+
+##Histogram  of int.qual with color for switch for both males and females
+hist.dat.female <- datF %>% filter(Q48 == "Female")
+ggplot(aes(x = Inst.Qual, color = Switch), data = datF) +
+  geom_histogram(alpha = 0.5, aes(fill = Switch)) +
+  xlab("Instructor Quality") +
+  facet_grid(vars(Q48))
+
+
+```
+
