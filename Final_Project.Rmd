@@ -294,6 +294,6 @@ ggplot(aes(x = Inst.Qual, color = Switch), data = datF) +
   xlab("Instructor Quality") +
   facet_grid(vars(Q48))
 
-
+##
 ```
 
