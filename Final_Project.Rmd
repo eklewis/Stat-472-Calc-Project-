@@ -170,7 +170,7 @@ swDat <- rbind(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,
 
 datF <- swDat %>%  
   
-   filter( !is.na(Q48)) %>% #filter female only
+   filter( !is.na(Q48)) %>%
   
    filter(! (is.na(Q18Post_Applications) & is.na(Q18Post_Appointments) & is.na(Q18Post_AskedQs)
             & is.na(Q18Post_Discouraged) & is.na(Q18Post_Explanations) &
@@ -261,8 +261,12 @@ ggplot(aes(x = Inst.Qual, color = Switch), data = datF) +
 ```{r}
 
 datF$Instr_Gender <- as.factor(datF$Instr_Gender)
+datF$Instr_Gender <- revalue(datF$Instr_Gender, c("0" = "Female", "1" = "Male"))
+datF$Instr_Gender <- relevel(datF$Instr_Gender, "Male")
 
-wi_prior <- normal(0.05, 4)
+datF$Q48 <- factor(datF$Q48, levels(datF$Q48[c("Male","Female")]))
+datF$Q48 <- relevel(datF$Q48, "Male")
+
 
 fit_pool <- stan_glmer(Switch ~  Q48*Instr_Gender + Inst.Qual + Instr_Age  + Calc_Grade + ExtraTime + (1|Institution_ID), data = datF, family = binomial("logit"))
 
@@ -272,10 +276,25 @@ summary_stats <- function(posterior) {
   t(apply(x, 2, quantile, probs = c(0.1, 0.5, 0.9))) 
 }
 
-t(apply(as.matrix(fit_pool), 2, quantile, probs = c(0.1, 0.5, 0.9)))
+betas <- t(apply(as.matrix(fit_pool), 2, quantile, probs = c(0.1, 0.5, 0.9)))
 pool <- summary_stats(as.matrix(fit_pool))
-pool
-launch_shinystan(fit_pool, ppd = FALSE)
+## launch_shinystan(fit_pool, ppd = FALSE) Website Link
+
+lower <- exp(betas[2:8,1])
+mean <- exp(betas[2:8,2])
+upper <- exp(betas[2:8,3])
+label <- c("Female Student","Female Instructor", "Instructor Quality", "Instructor Age", "Student's Calc 1 Grade", "Required Time for Nonschool", "Female Student*Female Instructor")
+df <- data.frame(label, mean, lower, upper)
+df$label <- factor(df$label, levels=rev(df$label))
+
+fp <- ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper)) +
+        geom_pointrange() + 
+        geom_hline(yintercept=1, lty=2) +  # add a dotted line at x=1 after flip
+        coord_flip() +  # flip coordinates (puts labels on y axis)
+        xlab("Label") + ylab("Odds Ratio") +
+        theme_bw() +  # use a white background
+        scale_y_continuous(limits=c(0,7)) + theme(legend.position = "None")
+print(fp)
 
 ```
 
