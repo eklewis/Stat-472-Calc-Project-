@@ -302,17 +302,30 @@ print(fp)
 ```{r}
 #Table of betas with 
 betas_table <- as.data.frame(pool[1:8,])
+rownames(betas_table) <- c("Intercept", "Female Student", "Female Instrucor", "Instructor Quality", "Instructor Age", "Students Calc 1 Grade", "Required Time for Nonschool", "Female Student*Female Instructor")
+
 
 knitr::kable(betas_table) %>%
   kable_styling("striped", full_width = F)
 
-##Histogram  of int.qual with color for switch for both males and females
+ ##Histogram  of int.qual with color for switch for both males and females
 hist.dat.female <- datF %>% filter(Q48 == "Female")
 ggplot(aes(x = Inst.Qual, color = Switch), data = datF) +
   geom_histogram(alpha = 0.5, aes(fill = Switch)) +
   xlab("Instructor Quality") +
   facet_grid(vars(Q48))
 
-##
+## Interaction plot
+sumStats <- datF %>%
+  group_by(Q48, Instr_Gender) %>%
+  summarise(n = n(),
+            mean = mean(as.numeric(Switch)),
+            sd = sd(as.numeric(Switch)))
+
+ggplot(sumStats, aes(x = Q48, y = mean,
+                     color = Instr_Gender,
+                     group = Instr_Gender)) +
+  geom_line() + 
+  geom_point()
 ```
 
